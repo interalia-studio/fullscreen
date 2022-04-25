@@ -8,7 +8,7 @@ const App = () => (
   <main>
     <Router>
       <Routes>
-        <Route path="/session/:sessionId" element={<Session />} />
+        <Route path="/board/:sessionId" element={<Session />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </Router>
