@@ -29,7 +29,9 @@
   "devDependencies": {
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
-    "parcel": "^2.3.2"
+    "buffer": "^6.0.3",
+    "parcel": "^2.3.2",
+    "process": "^0.11.10"
   },
   "browserslist": "> 0.5%, last 2 versions, not dead"
 }
