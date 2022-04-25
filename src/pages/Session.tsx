@@ -2,18 +2,17 @@ import { Tldraw, useFileSystem } from "@tldraw/tldraw";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react/cjs/react.production.min";
-import { useMultiplayerState } from "../useMultiplayerState";
+import { useEventHandlers } from "../handlers";
 
 /**
  * Wrapper for the TLDraw widget that connects to a session backend.
  */
 function Editor({ sessionId }: { sessionId: string }) {
   const fileSystemEvents = useFileSystem();
-  const { ...eventHandlers } = useMultiplayerState(sessionId);
+  const eventHandlers = useEventHandlers(sessionId);
 
   return (
     <Tldraw
-      autofocus
       disableAssets
       showPages={false}
       {...fileSystemEvents}
