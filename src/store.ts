@@ -7,8 +7,6 @@ const VERSION = 1;
 // Create the doc
 export const doc = new Y.Doc();
 
-export const roomID = `y-fullscreen-${VERSION}`;
-
 // Create a websocket provider
 export const getProvider = (sessionId: string) =>
   new WebsocketProvider(

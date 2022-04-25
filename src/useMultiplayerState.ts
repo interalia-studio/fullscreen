@@ -1,5 +1,5 @@
 import { TDBinding, TDShape, TDUser, TldrawApp } from "@tldraw/tldraw";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { Room } from "@y-presence/client";
 
 import { doc, getProvider, undoManager, yBindings, yShapes } from "./store";
@@ -8,15 +8,17 @@ import type { TldrawPresence } from "./types";
 export const useMultiplayerState = (sessionId: string) => {
   const [app, setApp] = useState<TldrawApp>();
   const [loading, setLoading] = useState(true);
-  const [provider, setProvider] = useState();
-  const [room, setRoom] = useState();
+
+  const provider = useMemo(() => {
+    return getProvider(sessionId);
+  }, [sessionId]);
+
+  const room = useMemo(() => {
+    return new Room(provider.awareness);
+  }, [provider]);
 
   const onMount = useCallback(
     (app: TldrawApp) => {
-      const provider = getProvider(sessionId);
-      setProvider(provider);
-      setRoom(new Room(provider.awareness));
-
       app.loadRoom(sessionId);
       app.pause();
       setApp(app);
