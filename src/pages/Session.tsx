@@ -1,22 +1,23 @@
-import { Tldraw, useFileSystem } from "@tldraw/tldraw";
+import { Tldraw } from "@tldraw/tldraw";
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react/cjs/react.production.min";
+
 import { useEventHandlers } from "../handlers";
+import { useFileSystem } from "../adapters/yjs/fileProvider";
 
 /**
  * Wrapper for the TLDraw widget that connects to a session backend.
  */
 function Editor({ sessionId }: { sessionId: string }) {
-  const fileSystemEvents = useFileSystem();
+  const fileSystemHandlers = useFileSystem();
   const eventHandlers = useEventHandlers(sessionId);
 
   return (
     <Tldraw
       disableAssets
       showPages={false}
-      {...fileSystemEvents}
       {...eventHandlers}
+      {...fileSystemHandlers}
     />
   );
 }

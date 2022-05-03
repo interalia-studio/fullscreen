@@ -9,4 +9,5 @@ export const yShapes: Y.Map<TDShape> = doc.getMap("shapes");
 export const yBindings: Y.Map<TDBinding> = doc.getMap("bindings");
 
 // Create an undo manager for the shapes and binding maps
-export const undoManager = new Y.UndoManager([yShapes, yBindings]);
+export const undoManager = (ctx: Set<any> | null) =>
+  new Y.UndoManager([yShapes, yBindings], { trackedOrigins: ctx });

@@ -1,12 +1,16 @@
 import { TDBinding, TDShape, TDUser, TldrawApp } from "@tldraw/tldraw";
 import { Room } from "@y-presence/client";
 import { WebsocketProvider } from "y-websocket";
+import { UndoManager } from "yjs";
 import { FSBoard, TldrawPresence } from "../../types";
+import { FileProvider } from "./fileProvider";
 import { undoManager, doc, yShapes, yBindings } from "./store";
 
 export default class Session {
   // Websocket provider for exchanging yjs patches
-  provider: WebsocketProvider;
+  networkProvider: WebsocketProvider;
+  localProvider: FileProvider;
+  undoManager: UndoManager;
 
   // y-presence room syncs all users' presence state
   room: Room;
@@ -17,9 +21,10 @@ export default class Session {
   _changeHandler: any;
   _handleDisconnect: Function;
 
-  constructor(sessionId: string) {
+  constructor(sessionId: string, userId: string) {
     this.sessionId = sessionId;
-    this.provider = new WebsocketProvider(
+    this.undoManager = undoManager(new Set(userId));
+    this.networkProvider = new WebsocketProvider(
       "wss://yjs.fullscreen.space",
       `yjs-fullscreen-${sessionId}`,
       doc,
@@ -27,7 +32,8 @@ export default class Session {
         connect: true,
       }
     );
-    this.room = new Room(this.provider.awareness);
+    this.localProvider = new FileProvider(doc);
+    this.room = new Room(this.networkProvider.awareness);
   }
 
   getShapes() {
@@ -43,7 +49,7 @@ export default class Session {
     shapes: Record<string, TDShape | undefined>,
     bindings: Record<string, TDBinding | undefined>
   ) {
-    undoManager.stopCapturing();
+    this.undoManager.stopCapturing();
     doc.transact(() => {
       Object.entries(shapes).forEach(([id, shape]) => {
         if (!shape) {
@@ -68,11 +74,11 @@ export default class Session {
   }
 
   onUndo() {
-    undoManager.undo();
+    this.undoManager.undo();
   }
 
   onRedo() {
-    undoManager.redo();
+    this.undoManager.redo();
   }
 
   connectPresence(handlePresenceChanges) {
@@ -99,8 +105,8 @@ export default class Session {
     if (this._changeHandler) {
       yShapes.unobserveDeep(this._changeHandler);
     }
-    if (this.provider) {
-      this.provider.disconnect();
+    if (this.networkProvider) {
+      this.networkProvider.disconnect();
     }
   }
 }
