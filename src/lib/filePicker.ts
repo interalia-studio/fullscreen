@@ -1,5 +1,5 @@
 export default {
-  onSave: async (binary: any) => {
+  onSave: async (binary: Uint8Array) => {
     if ("showSaveFilePicker" in window) {
       const newHandle = await (window as any).showSaveFilePicker();
       const writableStream = await newHandle.createWritable();

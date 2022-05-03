@@ -14,7 +14,6 @@ function Editor({ sessionId }: { sessionId: string }) {
 
   return (
     <Tldraw
-      id={sessionId}
       disableAssets
       showPages={false}
       {...eventHandlers}
