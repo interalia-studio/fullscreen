@@ -4,7 +4,7 @@ import { WebsocketProvider } from "y-websocket";
 import { UndoManager } from "yjs";
 import { FSBoard, TldrawPresence } from "../../types";
 import { FileProvider } from "./fileProvider";
-import { undoManager, doc, yShapes, yBindings } from "./store";
+import store from "./store";
 
 export default class Session {
   // Websocket provider for exchanging yjs patches
@@ -23,25 +23,25 @@ export default class Session {
 
   constructor(sessionId: string, userId: string) {
     this.sessionId = sessionId;
-    this.undoManager = undoManager(new Set(userId));
+    this.undoManager = store.undoManager(new Set(userId));
     this.networkProvider = new WebsocketProvider(
       "wss://yjs.fullscreen.space",
       `yjs-fullscreen-${sessionId}`,
-      doc,
+      store.doc,
       {
         connect: true,
       }
     );
-    this.localProvider = new FileProvider(doc);
+    this.localProvider = new FileProvider(store.doc);
     this.room = new Room(this.networkProvider.awareness);
   }
 
   getShapes() {
-    return Object.fromEntries(yShapes.entries());
+    return Object.fromEntries(store.yShapes.entries());
   }
 
   getBindings() {
-    return Object.fromEntries(yBindings.entries());
+    return Object.fromEntries(store.yBindings.entries());
   }
 
   handleEditorChanges(
@@ -50,19 +50,19 @@ export default class Session {
     bindings: Record<string, TDBinding | undefined>
   ) {
     this.undoManager.stopCapturing();
-    doc.transact(() => {
+    store.doc.transact(() => {
       Object.entries(shapes).forEach(([id, shape]) => {
         if (!shape) {
-          yShapes.delete(id);
+          store.yShapes.delete(id);
         } else {
-          yShapes.set(shape.id, shape);
+          store.yShapes.set(shape.id, shape);
         }
       });
       Object.entries(bindings).forEach(([id, binding]) => {
         if (!binding) {
-          yBindings.delete(id);
+          store.yBindings.delete(id);
         } else {
-          yBindings.set(binding.id, binding);
+          store.yBindings.set(binding.id, binding);
         }
       });
     });
@@ -70,7 +70,7 @@ export default class Session {
 
   onChanges(handler) {
     this._changeHandler = handler;
-    yShapes.observeDeep(handler);
+    store.yShapes.observeDeep(handler);
   }
 
   onUndo() {
@@ -103,7 +103,7 @@ export default class Session {
 
   close() {
     if (this._changeHandler) {
-      yShapes.unobserveDeep(this._changeHandler);
+      store.yShapes.unobserveDeep(this._changeHandler);
     }
     if (this.networkProvider) {
       this.networkProvider.disconnect();

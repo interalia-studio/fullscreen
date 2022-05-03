@@ -2,8 +2,9 @@ import * as Y from "yjs";
 import { Observable } from "lib0/observable";
 import { TldrawApp } from "@tldraw/tldraw";
 import { v4 as uuid } from "uuid";
+import store  from "./store";
 
-import { doc } from "./store";
+import filePicker from "../../lib/filePicker";
 
 /**
  * Connect to this provider to auto-save to a file
@@ -34,69 +35,16 @@ export const useFileSystem = () => {
     onNewProject: () => {
       window.location.href = `/board/${uuid()}`;
     },
-    onSaveProject: null,
+    onSaveProject: async (app: TldrawApp) => {
+      let binary = Y.encodeStateAsUpdate(store.doc);
+      filePicker.onSave(binary)
+    },
     onSaveProjectAs: null,
-    onOpenProject: null,
+    onOpenProject: async () => {
+      let binary = await filePicker.onOpen()
+      Y.applyUpdate(store.doc, binary)
+    },
   };
-
-  if ("showSaveFilePicker" in window) {
-    // use the new files and directories api which is not available in ff
-
-    handlers.onSaveProjectAs = async (app: TldrawApp) => {
-      const newHandle = await (window as any).showSaveFilePicker();
-      const writableStream = await newHandle.createWritable();
-      await writableStream.write(Y.encodeStateAsUpdate(doc));
-      await writableStream.close();
-    };
-
-    handlers.onOpenProject = async () => {
-      const [fileHandle] = await (window as any).showOpenFilePicker({
-        types: [
-          {
-            description: "Fullscreen Boards",
-            accept: {
-              "application/fullscreen": [".fullscreen"],
-            },
-          },
-        ],
-        multiple: false,
-      });
-
-      const bufferLike = await fileHandle.getFile();
-      const fileReader = new FileReader();
-      fileReader.onload = (event) => {
-        const update = new Uint8Array(event.target.result as ArrayBuffer);
-        Y.applyUpdate(doc, update);
-      };
-      fileReader.readAsArrayBuffer(bufferLike);
-    };
-  } else {
-    handlers.onSaveProject = async (app: TldrawApp) => {
-      const update = new Blob([Y.encodeStateAsUpdate(doc)]);
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(update);
-      link.download = "my_first_board.fullscreen";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    };
-
-    handlers.onOpenProject = () => {
-      const input = document.createElement("input");
-      input.type = "file";
-      input.accept = "*.fullscreen";
-      input.onchange = () => {
-        const fileReader = new FileReader();
-        fileReader.onload = (event) => {
-          const update = new Uint8Array(event.target.result as ArrayBuffer);
-          Y.applyUpdate(doc, update);
-        };
-        console.log(input.files[0]);
-        fileReader.readAsArrayBuffer(input.files[0]);
-      };
-      input.click();
-    };
-  }
 
   return handlers;
 };

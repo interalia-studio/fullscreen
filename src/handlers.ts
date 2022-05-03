@@ -50,7 +50,7 @@ export const useEventHandlers = (boardId: string) => {
   const onChangePresence = useCallback(
     (app: TldrawApp, user: TDUser) => {
       if (!app.room) return;
-      session.updatePresence(app.room.userId, user);
+      session && session.updatePresence(app.room.userId, user);
     },
     [session]
   );
