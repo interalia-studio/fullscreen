@@ -25,8 +25,6 @@ export default class Presence {
 
         const currentUser = app.room?.userId;
 
-        console.log(app.room);
-
         // Remove users that are not present anymore
         (Object.values(app.room.users) as TDUser[]).forEach((tduser) => {
           if (
