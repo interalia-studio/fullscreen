@@ -16,21 +16,30 @@
   },
   "scripts": {
     "start": "parcel --https",
-    "build": "parcel build"
+    "start:tauri": "run-p start tauri:dev",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "build": "run-s build:web build:tauri",
+    "build:web": "parcel build",
+    "build:tauri": "tauri build"
   },
   "dependencies": {
+    "@tauri-apps/api": "^1.0.0-rc.4",
     "@tldraw/tldraw": "^1.10.0",
     "@y-presence/client": "^1.1.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.3.0",
+    "styled-components": "^5.3.5",
     "uuid": "^8.3.2",
     "yjs": "^13.5.35"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
+    "@tauri-apps/cli": "^1.0.0-rc.9",
     "buffer": "^6.0.3",
+    "npm-run-all": "^4.1.5",
     "parcel": "^2.3.2",
     "process": "^0.11.10"
   },
