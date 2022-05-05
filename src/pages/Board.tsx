@@ -37,6 +37,23 @@ const Board = () => {
     await fileSystem.saveFile(fileContents);
   };
 
+  /**
+   * Setup Tauri event handlers on mount
+   */
+  useEffect(() => {
+    if (isNativeApp()) {
+      appWindow.listen("tauri://menu", ({ windowLabel, payload }) => {
+        switch (payload) {
+          case "open":
+            handleOpenProject();
+            break;
+          case "save":
+            handleSaveProject();
+        }
+      });
+    }
+  }, []);
+
   return (
     <main>
       <Tldraw
