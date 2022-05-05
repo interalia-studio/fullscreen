@@ -15,7 +15,7 @@ env:
   cargo_manifest: src-tauri/Cargo.toml
 
 jobs:
-  native:
+  tauri:
     strategy:
       fail-fast: false
       matrix:
@@ -61,5 +61,5 @@ jobs:
         tagName: fullscreen-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
         releaseName: "Fullscreen v__VERSION__"
         releaseBody: "See the assets to download this version and install."
-        releaseDraft: true
+        releaseDraft: false
         prerelease: true
