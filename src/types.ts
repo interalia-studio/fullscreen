@@ -1,4 +1,4 @@
-import { TDUser } from "@tldraw/tldraw";
+import { TDUser, TldrawProps } from "@tldraw/tldraw";
 
 export interface TldrawPresence {
   id: string;
@@ -9,4 +9,11 @@ export interface FSBoard {
   id: string;
   shapes: string[];
   bindings: string[];
+}
+
+export interface FSAdapter {
+  isLoading: boolean;
+  loadDocument: (input: Uint8Array) => void;
+  serialiseDocument: () => Uint8Array;
+  eventHandlers: TldrawProps;
 }

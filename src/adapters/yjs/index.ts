@@ -6,6 +6,7 @@ import * as Y from "yjs";
 import { FileProvider } from "./fileProvider";
 import Presence from "./presence";
 import store from "./store";
+import { FSAdapter } from "../../types";
 
 /**
  * A `YjsSession` uses a Websocket connection to a relay server to sync document
@@ -17,7 +18,7 @@ export const useYjsSession = (
   app: TldrawApp,
   boardId: string,
   onBoardChange: any
-) => {
+): FSAdapter => {
   // This is false until the page state has been loaded from yjs
   const [isLoading, setLoading] = useState(true);
 

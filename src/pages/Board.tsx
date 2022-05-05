@@ -29,7 +29,7 @@ const Board = () => {
 
   const handleOpenProject = async () => {
     const fileContents = await fileSystem.openFile();
-    const newSessionId = session.loadDocument(fileContents);
+    session.loadDocument(fileContents);
   };
 
   const handleSaveProject = async () => {
