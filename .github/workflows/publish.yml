@@ -1,11 +1,11 @@
-name: "tauri/publish"
+name: "release"
 on:
   push:
     branches:
       - native-app
 
 jobs:
-  publish-tauri:
+  native:
     strategy:
       fail-fast: false
       matrix:

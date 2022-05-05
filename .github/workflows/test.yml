@@ -1,8 +1,8 @@
-name: "tauri/test"
+name: "test"
 on: [pull_request]
 
 jobs:
-  test-tauri:
+  tauri:
     strategy:
       fail-fast: false
       matrix:
@@ -11,24 +11,29 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
     - uses: actions/checkout@v2
+
     - name: Setup node
       uses: actions/setup-node@v1
       with:
         node-version: 16
+
     - name: Install Rust (stable)
       uses: actions-rs/toolchain@v1
       with:
         toolchain: stable
+
     - name: Install dependencies (Ubuntu only)
       if: matrix.platform == 'ubuntu-latest'
       run: |
         sudo apt-get update
         sudo apt-get install -y libgtk-3-dev webkit2gtk-4.0 libappindicator3-dev librsvg2-dev patchelf
+
     - name: Install app dependencies and build it
       run: npm install && npm run build
+
     - name: Run Tauri action
       uses: tauri-apps/tauri-action@v0
       with:
         configPath: "src-tauri/tauri.conf.json"
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITH  UB_TOKEN }}
