@@ -65,6 +65,7 @@ const Board = () => {
         onNewProject={handleNewProject}
         onOpenProject={handleOpenProject}
         onSaveProject={handleSaveProject}
+        showMenu={!isNativeApp()}
         {...session?.eventHandlers}
       />
     </main>
