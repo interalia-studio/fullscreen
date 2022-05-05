@@ -53,4 +53,4 @@ jobs:
       with:
         configPath: "src-tauri/tauri.conf.json"
       env:
-        GITHUB_TOKEN: ${{ secrets.GITH  UB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
