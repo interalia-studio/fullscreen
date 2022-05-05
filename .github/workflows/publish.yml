@@ -1,9 +1,18 @@
 name: "release"
+
 on:
   push:
     branches:
       - main
       - native-app
+
+env:
+  CARGO_TERM_COLOR: always
+  cache_path: |
+    node_modules
+    src-tauri/target
+    ~/.cargo
+  cargo_manifest: src-tauri/Cargo.toml
 
 jobs:
   native:
@@ -13,18 +22,27 @@ jobs:
         platform: [macos-latest, ubuntu-latest, windows-latest]
 
     runs-on: ${{ matrix.platform }}
+
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
     - name: Setup node
       uses: actions/setup-node@v1
       with:
         node-version: 16
 
-    - name: Install Rust (stable)
+    - name: Install Rust toolchain
       uses: actions-rs/toolchain@v1
       with:
+        profile: minimal
         toolchain: stable
+
+    - name: Restore from cache
+      uses: actions/cache@v2
+      with:
+        path: ${{ env.cache_path }}
+        key: ${{ runner.os }}-publish-${{ hashFiles('**/Cargo.lock') }}
 
     - name: Install dependencies (Ubuntu only)
       if: matrix.platform == 'ubuntu-latest'
