@@ -27,5 +27,7 @@ jobs:
     - name: install app dependencies and build it
       run: npm install && npm run build:tauri
     - uses: tauri-apps/tauri-action@v0
+      with:
+        configPath: "src-tauri/tauri.conf.json"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
