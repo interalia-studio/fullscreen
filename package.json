@@ -16,7 +16,7 @@
   },
   "scripts": {
     "start": "parcel --https",
-    "build": "parcel build"
+    "build:web": "parcel build"
   },
   "dependencies": {
     "@tldraw/tldraw": "^1.10.0",
