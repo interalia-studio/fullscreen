@@ -38,7 +38,7 @@ const Board = () => {
   };
 
   return (
-    <main>
+    <div className="tldraw">
       <Tldraw
         disableAssets
         showPages={false}
@@ -48,9 +48,10 @@ const Board = () => {
         onNewProject={handleNewProject}
         onOpenProject={handleOpenProject}
         onSaveProject={handleSaveProject}
+        showTools={false}
         {...session?.eventHandlers}
       />
-    </main>
+    </div>
   );
 };
 
