@@ -2,12 +2,14 @@ import React, { useMemo } from "react";
 import { v4 as uuid } from "uuid";
 import { Navigate } from "react-router-dom";
 
+import { isNativeApp } from "../lib/tauri";
+
 import logoBMBF from "../assets/images/logo-bmbf.svg";
 import logoOKFN from "../assets/images/logo-okfn.svg";
 
 const Home = () => {
   // Redirects to a random board when opening the native app
-  if ((window as any).__TAURI__) {
+  if (isNativeApp) {
     return <Navigate replace to={`/board/${uuid()}`} />;
   }
 

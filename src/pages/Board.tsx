@@ -1,12 +1,12 @@
-import { Tldraw } from "@tldraw/tldraw";
-import React from "react";
+import { Tldraw, TldrawApp } from "@tldraw/tldraw";
+import { appWindow } from "@tauri-apps/api/window";
+import React, { useEffect, useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
 import { v4 as uuid } from "uuid";
-import { TldrawApp } from "@tldraw/tldraw";
-import { useCallback, useState } from "react";
 
 import { useYjsSession } from "../adapters/yjs";
 import fileSystem from "../lib/fileSystem";
+import { isNativeApp } from "../lib/tauri";
 
 const Board = () => {
   const { boardId } = useParams();

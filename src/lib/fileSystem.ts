@@ -1,5 +1,7 @@
 import { dialog, fs } from "@tauri-apps/api";
 
+import { isNativeApp } from "./tauri";
+
 /**
  * These filesystem handlers are independent of the CRDT used and provide
  * functions to use the browser platform for opening and saving files.
@@ -16,7 +18,7 @@ export default {
     binary: Uint8Array,
     fileName: string = "Untitled.fullscreen"
   ) => {
-    if ((window as any).__TAURI__) {
+    if (isNativeApp()) {
       const fPath = await dialog.save({
         filters: [
           {
@@ -53,7 +55,7 @@ export default {
    * `ArrayBuffer`.
    */
   openFile: async () => {
-    if ((window as any).__TAURI__) {
+    if (isNativeApp()) {
       const fPath = await dialog.open({
         directory: false,
         multiple: false,
