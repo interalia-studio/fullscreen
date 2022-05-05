@@ -17,7 +17,7 @@ import { FSAdapter } from "../../types";
 export const useYjsSession = (
   app: TldrawApp,
   boardId: string,
-  onBoardChange: any
+  onChangePresence: (user: TDUser) => any
 ): FSAdapter => {
   // This is false until the page state has been loaded from yjs
   const [isLoading, setLoading] = useState(true);
@@ -130,8 +130,10 @@ export const useYjsSession = (
       }, [boardId]),
 
       onChangePresence: useCallback(
-        (app: TldrawApp, user: TDUser) =>
-          app && room.update(app.room.userId, user),
+        (app: TldrawApp, user: TDUser) => {
+          app && room.update(app.room.userId, user);
+          onChangePresence(user);
+        },
         [room]
       ),
     },
