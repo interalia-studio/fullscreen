@@ -1,3 +1,5 @@
+import { dialog, fs } from "@tauri-apps/api";
+
 /**
  * These filesystem handlers are independent of the CRDT used and provide
  * functions to use the browser platform for opening and saving files.
@@ -12,8 +14,24 @@ export default {
    */
   saveFile: async (
     binary: Uint8Array,
-    fileName: string = "New Board 1.fullscreen"
+    fileName: string = "Untitled.fullscreen"
   ) => {
+    if ((window as any).__TAURI__) {
+      const fPath = await dialog.save({
+        filters: [
+          {
+            name: "Fullscreen Board",
+            extensions: ["fullscreen"],
+          },
+        ],
+      });
+      const contents = await fs.writeBinaryFile({
+        contents: binary,
+        path: fPath,
+      });
+      return contents;
+    }
+
     if ("showSaveFilePicker" in window) {
       const newHandle = await (window as any).showSaveFilePicker();
       const writableStream = await newHandle.createWritable();
@@ -35,6 +53,15 @@ export default {
    * `ArrayBuffer`.
    */
   openFile: async () => {
+    if ((window as any).__TAURI__) {
+      const fPath = await dialog.open({
+        directory: false,
+        multiple: false,
+      });
+      const contents = await fs.readBinaryFile(fPath as string);
+      return contents;
+    }
+
     return new Promise<Uint8Array>(async (resolve, reject) => {
       if ("showOpenFilePicker" in window) {
         const [fileHandle] = await (window as any).showOpenFilePicker({
