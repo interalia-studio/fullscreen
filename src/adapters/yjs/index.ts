@@ -1,5 +1,6 @@
 import { TDBinding, TDShape, TDUser, TldrawApp } from "@tldraw/tldraw";
 import { useCallback, useEffect, useState, useMemo } from "react";
+import { v4 as uuid } from "uuid";
 import { WebsocketProvider } from "y-websocket";
 import * as Y from "yjs";
 
@@ -14,11 +15,7 @@ import { FSAdapter } from "../../types";
  *
  * It can serialise and deserialise to a binary format.
  */
-export const useYjsSession = (
-  app: TldrawApp,
-  boardId: string,
-  onBoardChange: any
-): FSAdapter => {
+export const useYjsSession = (app: TldrawApp, boardId: string): FSAdapter => {
   // This is false until the page state has been loaded from yjs
   const [isLoading, setLoading] = useState(true);
 
@@ -42,9 +39,18 @@ export const useYjsSession = (
   const room = useMemo(() => new Presence(networkProvider), [networkProvider]);
 
   /**
+   * Replaces the full Tldraw document with shapes and bindings from y.js.
+   */
+  const replacePageWithDocState = () => {
+    const shapes = Object.fromEntries(store.yShapes.entries());
+    const bindings = Object.fromEntries(store.yBindings.entries());
+    app.replacePageContent(shapes, bindings, {});
+  };
+
+  /**
    * Handle changes made through the TLDraw widget.
    */
-  const onChangePage = useCallback(
+  const handleChangePage = useCallback(
     (
       _app: TldrawApp,
       shapes: Record<string, TDShape | undefined>,
@@ -79,11 +85,11 @@ export const useYjsSession = (
 
     room.connect(app);
 
-    const replacePageWithDocState = () => {
-      const shapes = Object.fromEntries(store.yShapes.entries());
-      const bindings = Object.fromEntries(store.yBindings.entries());
-      app.replacePageContent(shapes, bindings, {});
-    };
+    async function setup() {
+      store.yShapes.observeDeep(replacePageWithDocState);
+      replacePageWithDocState();
+      setLoading(false);
+    }
 
     const tearDown = () => {
       store.yShapes.unobserveDeep(replacePageWithDocState);
@@ -91,12 +97,6 @@ export const useYjsSession = (
     };
 
     window.addEventListener("beforeunload", tearDown);
-
-    async function setup() {
-      store.yShapes.observeDeep(replacePageWithDocState);
-      replacePageWithDocState();
-      setLoading(false);
-    }
     setup();
 
     return () => {
@@ -105,21 +105,49 @@ export const useYjsSession = (
     };
   }, [boardId, app]);
 
-  const loadDocument = (binary: Uint8Array) => {
-    // @TODO: Store document id in yjs, when loading from file redirect
-    // to the document's actual URL
-    // store.reset();
-    Y.applyUpdate(store.doc, binary);
+  /**
+   * Create a new board and return its id.
+   */
+  const createDocument = (): string => {
+    store.reset();
+    const newBoardId = uuid();
+    // Prevent undoing initial set of the board id
+    store.undoManager.stopCapturing();
+    store.doc.transact(() => {
+      store.board.set("id", newBoardId);
+    });
+    return newBoardId;
   };
 
+  /**
+   * Load a binary representation of a document into the page and
+   * reconnect the network provider.
+   *
+   * @param binary
+   * @returns
+   */
+  const loadDocument = (binary: Uint8Array): string => {
+    setLoading(true);
+    store.reset();
+    Y.applyUpdate(store.doc, binary);
+    if (networkProvider) networkProvider.disconnect();
+    replacePageWithDocState();
+    setLoading(false);
+    return store.board.get("id");
+  };
+
+  /**
+   * Returns a binary representation of the y.js document.
+   */
   const serialiseDocument = (): Uint8Array => Y.encodeStateAsUpdate(store.doc);
 
   return {
     isLoading,
+    createDocument,
     loadDocument,
     serialiseDocument,
     eventHandlers: {
-      onChangePage,
+      onChangePage: handleChangePage,
 
       onUndo: useCallback(() => {
         store.undo();
