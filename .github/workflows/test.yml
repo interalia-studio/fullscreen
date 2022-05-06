@@ -37,7 +37,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{ env.cache_path }}
-        key: ${{ runner.os }}-publish-${{ hashFiles('**/Cargo.lock') }}
+        key: ${{ runner.os }}-publish-${{ hashFiles('**/Cargo.lock') }}-${{ hashFiles('**/package-lock.json') }}
 
     - name: Install dependencies (Ubuntu only)
       if: matrix.platform == 'ubuntu-latest'
