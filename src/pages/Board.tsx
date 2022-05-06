@@ -1,15 +1,16 @@
 import { Tldraw } from "@tldraw/tldraw";
 import React from "react";
-import { useParams } from "react-router-dom";
-import { v4 as uuid } from "uuid";
+import { useNavigate, useParams } from "react-router-dom";
 import { TldrawApp } from "@tldraw/tldraw";
 import { useCallback, useState } from "react";
 
 import { useYjsSession } from "../adapters/yjs";
 import fileSystem from "../lib/fileSystem";
+import store from "../adapters/yjs/store";
 
 const Board = () => {
   const { boardId } = useParams();
+  let navigate = useNavigate();
 
   const [app, setApp] = useState<TldrawApp>();
   const handleMount = useCallback(
@@ -21,15 +22,19 @@ const Board = () => {
     [boardId]
   );
 
-  const session = useYjsSession(app, boardId, handleMount);
+  const session = useYjsSession(app, boardId);
 
-  const handleNewProject = () => {
-    window.location.href = `/board/${uuid()}`;
+  // console.log(store.board.get("id"));
+
+  const handleNewProject = (app1: TldrawApp) => {
+    const newBoardId = session.createDocument();
+    navigate(`/board/${newBoardId}`);
   };
 
   const handleOpenProject = async () => {
     const fileContents = await fileSystem.openFile();
-    session.loadDocument(fileContents);
+    const newBoardId = session.loadDocument(fileContents);
+    navigate(`/board/${newBoardId}`);
   };
 
   const handleSaveProject = async () => {

@@ -13,6 +13,7 @@ export interface FSBoard {
 
 export interface FSAdapter {
   isLoading: boolean;
+  createDocument: () => string;
   loadDocument: (input: Uint8Array) => void;
   serialiseDocument: () => Uint8Array;
   eventHandlers: TldrawProps;
