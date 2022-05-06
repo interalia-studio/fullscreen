@@ -9,7 +9,6 @@ on:
 env:
   CARGO_TERM_COLOR: always
   cache_path: |
-    node_modules
     src-tauri/target
     ~/.cargo
   cargo_manifest: src-tauri/Cargo.toml
