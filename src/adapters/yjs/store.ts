@@ -18,11 +18,12 @@ export class Doc {
   undoManager: Y.UndoManager;
 
   constructor() {
-    this.reset();
+    this.reset(null);
   }
 
-  reset() {
+  reset(initialUpdate: any) {
     this.doc = new Y.Doc();
+    if (initialUpdate) Y.applyUpdate(this.doc, initialUpdate);
     this.yShapes = this.doc.getMap("shapes");
     this.yBindings = this.doc.getMap("bindings");
     this.board = this.doc.getMap("board");

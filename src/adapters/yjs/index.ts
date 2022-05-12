@@ -109,7 +109,7 @@ export const useYjsSession = (app: TldrawApp, boardId: string): FSAdapter => {
    * Create a new board and return its id.
    */
   const createDocument = (): string => {
-    store.reset();
+    store.reset(null);
     const newBoardId = uuid();
     // Prevent undoing initial set of the board id
     store.undoManager.stopCapturing();
@@ -122,14 +122,10 @@ export const useYjsSession = (app: TldrawApp, boardId: string): FSAdapter => {
   /**
    * Load a binary representation of a document into the page and
    * reconnect the network provider.
-   *
-   * @param binary
-   * @returns
    */
   const loadDocument = (binary: Uint8Array): string => {
     setLoading(true);
-    store.reset();
-    Y.applyUpdate(store.doc, binary);
+    store.reset(binary);
     if (networkProvider) networkProvider.disconnect();
     replacePageWithDocState();
     setLoading(false);

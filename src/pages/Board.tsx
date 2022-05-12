@@ -23,7 +23,7 @@ const Board = () => {
     [boardId]
   );
 
-  const session = useYjsSession(app, boardId, handleMount);
+  const session = useYjsSession(app, boardId);
 
   const handleNewProject = () => {
     const newBoardId = session.createDocument();
