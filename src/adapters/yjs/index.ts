@@ -123,9 +123,9 @@ export const useYjsSession = (app: TldrawApp, boardId: string): FSAdapter => {
    * Load a binary representation of a document into the page and
    * reconnect the network provider.
    */
-  const loadDocument = (binary: Uint8Array): string => {
+  const loadDocument = (serialisedDocument: Uint8Array): string => {
     setLoading(true);
-    store.reset(binary);
+    store.reset(serialisedDocument);
     if (networkProvider) networkProvider.disconnect();
     replacePageWithDocState();
     setLoading(false);

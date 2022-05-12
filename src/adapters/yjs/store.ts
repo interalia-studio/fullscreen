@@ -21,7 +21,7 @@ export class Doc {
     this.reset(null);
   }
 
-  reset(initialUpdate: any) {
+  reset(initialUpdate: Uint8Array) {
     this.doc = new Y.Doc();
     if (initialUpdate) Y.applyUpdate(this.doc, initialUpdate);
     this.yShapes = this.doc.getMap("shapes");
