@@ -8,16 +8,25 @@ import { useYjsSession } from "../adapters/yjs";
 import fileSystem from "../lib/fileSystem";
 import { isNativeApp } from "../lib/tauri";
 import store from "../adapters/yjs/store";
+import localforage from "localforage";
+import * as anonymous from "anonymus";
 
 const Board = () => {
   const { boardId } = useParams();
+  const [ name, setName ] = useState()
   let navigate = useNavigate();
 
   const [app, setApp] = useState<TldrawApp>();
   const handleMount = useCallback(
-    (app: TldrawApp) => {
+    async (app: TldrawApp) => {
       app.loadRoom(boardId);
       app.pause();
+
+      let name = await localforage.getItem<string>("my_name") 
+      if (!name) {
+        name = 'Anonymous ' + anonymous.randomAnimal()
+      }
+      store.yUsers.set(app.currentUser.id, name)
       setApp(app);
     },
     [boardId]

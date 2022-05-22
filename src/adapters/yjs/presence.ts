@@ -2,6 +2,7 @@ import { TDUser, TldrawApp } from "@tldraw/tldraw";
 import { Room } from "@y-presence/client";
 import { WebsocketProvider } from "y-websocket";
 
+import store from "./store";
 import { TldrawPresence } from "../../types";
 
 export default class Presence {
@@ -36,11 +37,16 @@ export default class Presence {
           }
         });
 
+
         // Update all other users
         app.updateUsers(
           users
             .filter((user) => user.presence)
-            .map((other) => other.presence!.tdUser)
+            .map((other) => {
+              let ret = other.presence!.tdUser
+              ret.name = store.yUsers.get(ret.id)
+              return ret
+            })
             .filter(Boolean)
         );
       }

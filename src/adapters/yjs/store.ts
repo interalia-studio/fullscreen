@@ -11,6 +11,9 @@ export class Doc {
   // Reference to Tldraw shapes.
   yShapes: Y.Map<TDShape>;
 
+  // Reference to usernames
+  yUsers: Y.Map<String>;
+
   // Reference to bindings between Tldraw shapes.
   yBindings: Y.Map<TDBinding>;
 
@@ -26,6 +29,7 @@ export class Doc {
     if (initialUpdate) Y.applyUpdate(this.doc, initialUpdate);
     this.yShapes = this.doc.getMap("shapes");
     this.yBindings = this.doc.getMap("bindings");
+    this.yUsers = this.doc.getMap("users");
     this.board = this.doc.getMap("board");
     this.undoManager = new Y.UndoManager([this.yShapes, this.yBindings]);
   }
