@@ -2,7 +2,10 @@ import { TDUser, TldrawApp } from "@tldraw/tldraw";
 import { Room } from "@y-presence/client";
 import { WebsocketProvider } from "y-websocket";
 
+import { throttle } from "lodash";
 import { TldrawPresence } from "../../types";
+
+const THROTLE_MS = 150
 
 export default class Presence {
   room: Room;
@@ -15,13 +18,13 @@ export default class Presence {
   connect(app: TldrawApp) {
     this._handleDisconnect = this.room.subscribe<TldrawPresence>(
       "others",
-      (users: any) => {
+      throttle((users: any) => {
         if (!app.room) return;
-
         // Extract all user ids that have presence information
         const present_ids = users
           .filter((user) => user.presence)
           .map((user) => user.presence!.tdUser.id);
+
 
         const currentUser = app.room?.userId;
 
@@ -43,7 +46,7 @@ export default class Presence {
             .map((other) => other.presence!.tdUser)
             .filter(Boolean)
         );
-      }
+      }, THROTLE_MS)
     );
   }
 
