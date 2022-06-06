@@ -5,7 +5,9 @@ import { WebsocketProvider } from "y-websocket";
 import { throttle } from "lodash";
 import { TldrawPresence } from "../../types";
 
-const THROTLE_MS = 150
+// Limit the frequency of presence updates so delays don't add up
+// and participant cursors get out of sync.
+const THROTTLE_MS = 150;
 
 export default class Presence {
   room: Room;
@@ -24,7 +26,6 @@ export default class Presence {
         const present_ids = users
           .filter((user) => user.presence)
           .map((user) => user.presence!.tdUser.id);
-
 
         const currentUser = app.room?.userId;
 
@@ -46,7 +47,7 @@ export default class Presence {
             .map((other) => other.presence!.tdUser)
             .filter(Boolean)
         );
-      }, THROTLE_MS)
+      }, THROTTLE_MS)
     );
   }
 
