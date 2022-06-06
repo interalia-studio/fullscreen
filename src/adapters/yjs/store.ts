@@ -21,7 +21,12 @@ export class Doc {
     this.reset(null);
   }
 
-  reset(initialUpdate: Uint8Array) {
+  /**
+   * Reset the document store with an optional initial update to apply.
+   *
+   * @param initialUpdate serialised yjs update
+   */
+  reset(initialUpdate: Uint8Array | null) {
     this.doc = new Y.Doc();
     if (initialUpdate) Y.applyUpdate(this.doc, initialUpdate);
     this.yShapes = this.doc.getMap("shapes");

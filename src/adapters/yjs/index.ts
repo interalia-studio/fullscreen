@@ -129,7 +129,12 @@ export const useYjsSession = (app: TldrawApp, boardId: string): FSAdapter => {
     if (networkProvider) networkProvider.disconnect();
     replacePageWithDocState();
     setLoading(false);
-    return store.board.get("id");
+    const boardId = store.board.get("id");
+    if (boardId == null) {
+      alert("Outdated document doesn't contain a board id");
+      return createDocument();
+    }
+    return boardId;
   };
 
   /**
