@@ -2,7 +2,7 @@ import { TLBounds, TLPage, TLPageState, Utils } from "@tldraw/core";
 import Vec from "@tldraw/vec";
 import { action, makeAutoObservable } from "mobx";
 
-import type { Shape } from "./types";
+import { Shape } from "../../shapes";
 
 export class Page implements TLPage<Shape> {
   id;

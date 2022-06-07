@@ -1,17 +1,43 @@
 import { appWindow } from "@tauri-apps/api/window";
 import React, { useEffect, useCallback, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { v4 as uuid } from "uuid";
+import { useStateDesigner } from "@state-designer/react";
 
-import { useYjsSession } from "../adapters/yjs";
-import fileSystem from "../lib/fileSystem";
-import { isNativeApp } from "../lib/tauri";
-import store from "../adapters/yjs/store";
-import TLDrawWidget from "../components/Canvas";
+import { useYjsSession } from "~/src/adapters/yjs";
+import fileSystem from "~/src/lib/fileSystem";
+import { isNativeApp } from "~/src/lib/tauri";
+import store from "~/src/adapters/yjs/store";
+import TLDrawWidget from "~/src/components/Canvas";
+import Toolbar from "~/src/components/Toolbar";
+import { machine } from "~/src/state/machine";
+import { Api } from "~/src/state/api";
+import { shapeUtils } from "~/src/shapes";
 
 const Board = () => {
   const { boardId } = useParams();
   let navigate = useNavigate();
+
+  const appState = useStateDesigner(machine);
+
+  useEffect(() => {
+    const api = new Api(appState);
+    window["api"] = api;
+  }, []);
+
+  const hideBounds = appState.isInAny(
+    "transformingSelection",
+    "translating",
+    "creating"
+  );
+
+  const firstShapeId = appState.data.pageState.selectedIds[0];
+  const firstShape = firstShapeId
+    ? appState.data.page.shapes[firstShapeId]
+    : null;
+  const hideResizeHandles = firstShape
+    ? appState.data.pageState.selectedIds.length === 1 &&
+      shapeUtils[firstShape.type].hideResizeHandles
+    : false;
 
   // const [app, setApp] = useState<TldrawApp>();
   // const handleMount = useCallback(
@@ -61,7 +87,12 @@ const Board = () => {
 
   return (
     <main>
-      <TLDrawWidget />
+      <Toolbar activeStates={appState.active} lastEvent={appState.log[0]} />
+      <TLDrawWidget
+        appState={appState}
+        hideBounds={hideBounds}
+        hideResizeHandles={hideResizeHandles}
+      />
     </main>
   );
 };

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "jsx": "react",
+    "paths": {
+      "~/*": ["./*"]
+    },
+    "lib": ["dom", "esnext"],
+    "target": "esnext",
+    "moduleResolution": "node"
+  }
+}
