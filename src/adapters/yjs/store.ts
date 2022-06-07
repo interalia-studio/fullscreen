@@ -1,5 +1,5 @@
 import * as Y from "yjs";
-import { TDBinding, TDShape } from "@tldraw/tldraw";
+import { TLBinding, TLShape } from "@tldraw/core";
 
 export class Doc {
   // A Y.js doc that contains all board contents and metadata.
@@ -9,10 +9,10 @@ export class Doc {
   board: Y.Map<string>;
 
   // Reference to Tldraw shapes.
-  yShapes: Y.Map<TDShape>;
+  yShapes: Y.Map<TLShape>;
 
   // Reference to bindings between Tldraw shapes.
-  yBindings: Y.Map<TDBinding>;
+  yBindings: Y.Map<TLBinding>;
 
   // Manages undo and redo state/actions.
   undoManager: Y.UndoManager;

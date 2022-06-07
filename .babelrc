@@ -1,0 +1,9 @@
+// This file is formatted using JSON5
+{
+  "plugins": [
+    // These three plugins are used to enable mobx decorators with Parcel.
+    "@babel/plugin-transform-runtime",
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose": true }]
+  ]
+}

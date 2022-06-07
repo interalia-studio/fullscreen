@@ -25,8 +25,10 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^1.0.0-rc.4",
-    "@tldraw/tldraw": "^1.10.0",
+    "@tldraw/core": "^1.13.1",
+    "@tldraw/vec": "^1.7.0",
     "@y-presence/client": "^1.1.7",
+    "mobx": "^6.6.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.3.0",
@@ -35,8 +37,9 @@
     "yjs": "^13.5.35"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.16.11",
-    "@babel/preset-react": "^7.16.7",
+    "@babel/plugin-proposal-class-properties": "^7.17.12",
+    "@babel/plugin-proposal-decorators": "^7.18.2",
+    "@babel/plugin-transform-runtime": "^7.18.2",
     "@tauri-apps/cli": "^1.0.0-rc.9",
     "buffer": "^6.0.3",
     "npm-run-all": "^4.1.5",
@@ -44,11 +47,11 @@
     "process": "^0.11.10"
   },
   "optionalDependencies": {
+    "@tauri-apps/cli-darwin-x64": "1.0.0-rc.9",
     "@tauri-apps/cli-linux-arm64-gnu": "1.0.0-rc.9",
     "@tauri-apps/cli-linux-arm64-musl": "1.0.0-rc.9",
     "@tauri-apps/cli-linux-x64-gnu": "1.0.0-rc.9",
     "@tauri-apps/cli-linux-x64-musl": "1.0.0-rc.9",
-    "@tauri-apps/cli-darwin-x64": "1.0.0-rc.9",
     "@tauri-apps/cli-win32-x64-msvc": "1.0.0-rc.9"
   },
   "browserslist": "> 0.5%, last 2 versions, not dead"
