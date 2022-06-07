@@ -2,7 +2,7 @@
     font-family: 'Urbanist';
     font-weight: 400;
     font-style: normal;
-    src: url("/assets/Urbanist-Regular.woff2") format('woff2');
+    src: url("../src/assets/Urbanist-Regular.woff2") format('woff2');
   }
 
 
