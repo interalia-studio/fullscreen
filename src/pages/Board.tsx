@@ -9,8 +9,6 @@ import fileSystem from "../lib/fileSystem";
 import { isNativeApp } from "../lib/tauri";
 import store from "../adapters/yjs/store";
 
-import "./board.css";
-
 const Board = () => {
   const { boardId } = useParams();
   let navigate = useNavigate();
@@ -61,7 +59,7 @@ const Board = () => {
   }, []);
 
   return (
-    <main>
+    <main className="canvas">
       <Tldraw
         disableAssets
         showPages={false}

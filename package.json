@@ -24,6 +24,7 @@
     "build:tauri": "tauri build"
   },
   "dependencies": {
+    "@stitches/react": "^1.2.8",
     "@tauri-apps/api": "^1.0.0-rc.4",
     "@tldraw/tldraw": "^1.10.0",
     "@y-presence/client": "^1.1.7",
@@ -44,11 +45,11 @@
     "process": "^0.11.10"
   },
   "optionalDependencies": {
+    "@tauri-apps/cli-darwin-x64": "1.0.0-rc.9",
     "@tauri-apps/cli-linux-arm64-gnu": "1.0.0-rc.9",
     "@tauri-apps/cli-linux-arm64-musl": "1.0.0-rc.9",
     "@tauri-apps/cli-linux-x64-gnu": "1.0.0-rc.9",
     "@tauri-apps/cli-linux-x64-musl": "1.0.0-rc.9",
-    "@tauri-apps/cli-darwin-x64": "1.0.0-rc.9",
     "@tauri-apps/cli-win32-x64-msvc": "1.0.0-rc.9"
   },
   "browserslist": "> 0.5%, last 2 versions, not dead"

@@ -1,16 +1,10 @@
 .landingContainer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  margin: 0;
-  width: 100%;
-  height: 100%;
+  padding: 5rem;
   background-color: lightblue;
 }
 
 .landing {
   width: 100%;
-  margin: 5rem;
   padding: 3rem;
 }
 @media screen and (min-width: 1000px) {
@@ -19,12 +13,12 @@
   }
 }
 
-body {
+.landingContainer {
   cursor: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='9' cy='9' r='9' fill='%23E35549'/%3E%3C/svg%3E%0A")
       16 16,
     pointer;
 }
-h1 {
+.landing h1 {
   color: #5556ad;
   font-weight: 100px;
   font-size: 120px;
@@ -34,7 +28,7 @@ h1 {
   margin: 5rem 0 1.38rem;
 }
 
-h2 {
+.landing h2 {
   color: #5556ad;
   font-weight: bolder;
   font-family: "Urbanist", serif;
@@ -42,7 +36,7 @@ h2 {
   text-align: right;
 }
 
-h3 {
+.landing h3 {
   color: #5556ad;
   font-weight: 50;
   font-size: 40px;
@@ -52,7 +46,7 @@ h3 {
   padding: 3rem;
 }
 
-p {
+.landing p {
   color: #5556ad;
   font-weight: 50;
   font-size: 18px;
@@ -60,20 +54,13 @@ p {
   font-family: "Urbanist", serif;
 }
 
-.visualplay {
-  display: block;
-  margin: 0 auto;
-  width: 1500px;
-  align-items: center;
-}
-
-.box {
+.landing .box {
   width: 100%;
   height: 100%;
   border: 0px;
 }
 
-hr {
+.landing hr {
   border: none;
   border-top: 3px double #f5f5f5;
   color: #e35549;
@@ -82,7 +69,7 @@ hr {
   height: 10px;
 }
 
-hr:after {
+.landing hr:after {
   background: #f5f5f526;
   content: "▲";
   padding: 0 5px;
@@ -90,7 +77,7 @@ hr:after {
   top: -13px;
 }
 
-button {
+.landing button {
   border: 2px solid #5556ad;
   border-radius: 20px;
   color: #5556ad;
@@ -107,14 +94,14 @@ button {
   transition: all 200ms ease-in-out;
 }
 
-button:hover {
+.landing button:hover {
   background: rgb(54, 134, 90);
   color: #f5f5f5;
   font-weight: medium;
   cursor: pointer;
 }
 
-ul {
+.landing ul {
   list-style: none;
   padding: 0;
   overflow: visible;
@@ -126,20 +113,20 @@ ul {
   margin-top: 30px;
 }
 
-.meaning {
+.landing .meaning {
   color: #5556ad;
   font-family: "Urbanist", serif;
   font-size: 15px;
   text-align: center;
 }
-.decentpattern {
+.landing .decentpattern {
   color: #5556ad;
   font-family: "Urbanist", serif;
   font-size: 15px;
   text-align: center;
 }
 
-.symbol {
+.landing .symbol {
   font-size: 60px;
   text-align: center;
   margin-top: 90px;
@@ -150,32 +137,4 @@ ul {
 .signature {
   width: 100px;
   height: 100px;
-}
-
-.logo {
-  width: 250px;
-  height: auto;
-}
-footer {
-  text-align: center;
-  padding: 100px;
-  background-color: #f5f5f5;
-  color: #f5f5f5;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-.column {
-  float: left;
-  width: 20%;
-  padding: 5px;
-}
-
-/* Clearfix (clear floats) */
-.row::after {
-  content: "";
-  clear: both;
-  display: table;
 }
