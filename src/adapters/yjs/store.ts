@@ -1,5 +1,6 @@
 import * as Y from "yjs";
 import { TLBinding, TLShape } from "@tldraw/core";
+import { nanoid } from "nanoid";
 
 export class Doc {
   // A Y.js doc that contains all board contents and metadata.
@@ -41,6 +42,15 @@ export class Doc {
 
   redo() {
     this.undoManager.redo();
+  }
+
+  createShape(value: TLShape): string {
+    const id = nanoid();
+    this.doc.transact(() => {
+      this.yShapes.set(id, value);
+      console.log("Created shape", id);
+    });
+    return id;
   }
 }
 

@@ -1,4 +1,4 @@
-import { TLUser } from "@tldraw/core";
+import { RendererProps, TLSnapLine, TLUser } from "@tldraw/core";
 import { Shape } from "./shapes";
 
 export interface TldrawPresence {
@@ -17,5 +17,17 @@ export interface FSAdapter {
   createDocument: () => string;
   loadDocument: (input: Uint8Array) => void;
   serialiseDocument: () => Uint8Array;
-  eventHandlers: any;
+  eventHandlers: {
+    handleCreateShape: (id: string, data) => void;
+    handleUpdateShape: (id: string, data) => void;
+    handleDeleteShape: (id: string) => void;
+  };
+}
+
+export type CanvasMetadata = {
+  isDarkMode: boolean;
+};
+
+export interface CanvasState {
+  data: RendererProps<Shape, CanvasMetadata>;
 }

@@ -49,41 +49,45 @@ const Board = () => {
   //   [boardId]
   // );
 
-  // const session = useYjsSession(app, boardId);
+  const session = useYjsSession(appState, boardId);
 
-  // const handleNewProject = () => {
-  //   const newBoardId = session.createDocument();
-  //   navigate(`/board/${newBoardId}`);
-  // };
+  useEffect(() => {
+    navigate(`/board/${appState.data.id}`);
+  }, [appState.data.id]);
 
-  // const handleOpenProject = async () => {
-  //   const fileContents = await fileSystem.openFile();
-  //   const newBoardId = session.loadDocument(fileContents);
+  const handleNewProject = () => {
+    appState.send("RESET");
+  };
 
-  //   navigate(`/board/${newBoardId}`);
-  // };
+  const handleOpenProject = async () => {
+    const fileContents = await fileSystem.openFile();
+    const newBoardId = api.loadDocument(fileContents);
+    appState.send("LOADED_DOCUMENT", fileContents);
 
-  // const handleSaveProject = async () => {
-  //   const fileContents = session.serialiseDocument();
-  //   await fileSystem.saveFile(fileContents);
-  // };
+    navigate(`/board/${newBoardId}`);
+  };
 
-  // /**
-  //  * Setup Tauri event handlers on mount
-  //  */
-  // useEffect(() => {
-  //   if (isNativeApp()) {
-  //     appWindow.listen("tauri://menu", ({ windowLabel, payload }) => {
-  //       switch (payload) {
-  //         case "open":
-  //           handleOpenProject();
-  //           break;
-  //         case "save":
-  //           handleSaveProject();
-  //       }
-  //     });
-  //   }
-  // }, []);
+  const handleSaveProject = async () => {
+    const fileContents = api.serialiseDocument();
+    await fileSystem.saveFile(fileContents);
+  };
+
+  /**
+   * Setup Tauri event handlers on mount
+   */
+  useEffect(() => {
+    if (isNativeApp()) {
+      appWindow.listen("tauri://menu", ({ windowLabel, payload }) => {
+        switch (payload) {
+          case "open":
+            handleOpenProject();
+            break;
+          case "save":
+            handleSaveProject();
+        }
+      });
+    }
+  }, []);
 
   return (
     <main>

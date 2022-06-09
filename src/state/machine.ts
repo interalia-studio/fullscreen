@@ -8,7 +8,7 @@ import { mutables } from "./mutables";
 
 export const machine = createState({
   data: INITIAL_DATA,
-  onEnter: ["restoreSavedDocument", "updateBoundShapes"],
+  onEnter: ["updateBoundShapes"],
   on: {
     MOVED_POINTER: "updatePointer",
     SELECTED_TOOL: { to: (_, payload) => payload.name },
@@ -29,12 +29,12 @@ export const machine = createState({
       to: "select.idle",
     },
     // These events are called from the API only, see api.ts
-    CREATED_SHAPES: ["createShapes", "addToHistory"],
-    UPDATED_SHAPES: ["updateShapes", "updateBoundShapes", "addToHistory"],
-    DELETED_SHAPES: ["deleteShapes", "updateBoundShapes", "addToHistory"],
-    CREATED_BINDINGS: ["createBindings", "addToHistory"],
-    UPDATED_BINDINGS: ["updateBindings", "updateBoundShapes", "addToHistory"],
-    DELETED_BINDINGS: ["deleteBindings", "updateBoundShapes", "addToHistory"],
+    CREATED_SHAPES: ["createShapes"],
+    UPDATED_SHAPES: ["updateShapes", "updateBoundShapes"],
+    DELETED_SHAPES: ["deleteShapes", "updateBoundShapes"],
+    CREATED_BINDINGS: ["createBindings"],
+    UPDATED_BINDINGS: ["updateBindings", "updateBoundShapes"],
+    DELETED_BINDINGS: ["deleteBindings", "updateBoundShapes"],
   },
   initial: "select",
   states: {
@@ -47,11 +47,7 @@ export const machine = createState({
             SELECTED_ALL: "selectAllShapes",
             DESELECTED_ALL: "deselectAllShapes",
             CANCELLED: ["deselectAllShapes", "updateBoundShapes"],
-            DELETED: [
-              "deleteSelectedShapes",
-              "updateBoundShapes",
-              "addToHistory",
-            ],
+            DELETED: ["deleteSelectedShapes", "updateBoundShapes"],
             UNDO: "undo",
             REDO: "redo",
             HOVERED_SHAPE: "setHoveredShape",
@@ -161,7 +157,6 @@ export const machine = createState({
               to: "select.idle",
             },
             STOPPED_POINTING: {
-              do: "addToHistory",
               to: "select.idle",
             },
           },
@@ -207,7 +202,6 @@ export const machine = createState({
               to: "select.idle",
             },
             STOPPED_POINTING: {
-              do: "addToHistory",
               to: "select.idle",
             },
           },
@@ -252,7 +246,7 @@ export const machine = createState({
               to: "eraser.erasing",
             },
             STOPPED_POINTING: {
-              do: ["eraseShapesAtPoint", "updateBoundShapes", "addToHistory"],
+              do: ["eraseShapesAtPoint", "updateBoundShapes"],
               to: "select",
             },
           },
@@ -267,7 +261,7 @@ export const machine = createState({
               to: "select",
             },
             STOPPED_POINTING: {
-              do: ["eraseGhostShapes", "updateBoundShapes", "addToHistory"],
+              do: ["eraseGhostShapes", "updateBoundShapes"],
               to: "eraser.idle",
             },
           },
@@ -302,7 +296,7 @@ export const machine = createState({
               do: "deleteSelectedShapes",
             },
             STOPPED_POINTING: {
-              do: ["deselectAllShapes", "addToHistory"],
+              do: ["deselectAllShapes"],
               to: "pencil.idle",
             },
           },
@@ -343,7 +337,6 @@ export const machine = createState({
               to: "select",
             },
             STOPPED_POINTING: {
-              do: "addToHistory",
               to: "select",
             },
           },
@@ -388,7 +381,6 @@ export const machine = createState({
               to: "select",
             },
             STOPPED_POINTING: {
-              do: "addToHistory",
               to: "select",
             },
           },

@@ -3,6 +3,7 @@ import { shapeUtils } from "~/src/shapes";
 import type { Action } from "~/src/state/constants";
 import { getPagePoint } from "~/src/state/helpers";
 import { mutables } from "~/src/state/mutables";
+import { publishShape } from "../network";
 
 export const createBoxShape: Action = (data, payload: TLPointerInfo) => {
   const shape = shapeUtils.box.getShape({
@@ -11,6 +12,8 @@ export const createBoxShape: Action = (data, payload: TLPointerInfo) => {
     size: [1, 1],
     childIndex: Object.values(data.page.shapes).length,
   });
+
+  shape.id = publishShape(data, shape);
 
   data.page.shapes[shape.id] = shape;
   data.pageState.selectedIds = [shape.id];

@@ -39,7 +39,7 @@ export class BoxUtil extends CustomShapeUtil<T, E> {
 
   getShape = (props: Partial<T>): T => {
     return {
-      id: nanoid(),
+      id: null,
       type: "box",
       name: "Box",
       parentId: "page1",
