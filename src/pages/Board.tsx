@@ -59,7 +59,7 @@ const Board = () => {
   }, []);
 
   return (
-    <main>
+    <main className="canvas">
       <Tldraw
         disableAssets
         showPages={false}

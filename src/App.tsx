@@ -5,14 +5,14 @@ import Home from "./pages/Home";
 import Board from "./pages/Board";
 
 const App = () => (
-  <main>
+  <React.StrictMode>
     <Router>
       <Routes>
         <Route path="/board/:boardId" element={<Board />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </Router>
-  </main>
+  </React.StrictMode>
 );
 
 export default App;
