@@ -48,41 +48,40 @@ export const useYjsSession = (
    * Replaces the full Tldraw document with shapes and bindings from y.js.
    */
   const replacePageWithDocState = () => {
-    const shapes = [...store.yShapes.values()];
-    console.log("Update from yjs", shapes.length);
-    app.send("UPDATED_SHAPES", shapes);
-    app.send("UPDATED_BINDINGS", store.yBindings.values());
-  };
+    let create = [],
+      update = [],
+      removeSet = new Set(Object.keys(app.data.page.shapes));
 
-  // /**
-  //  * Handle changes made through the TLDraw widget.
-  //  */
-  // const handleChangePage = useCallback(
-  //   (
-  //     _app: TldrawApp,
-  //     shapes: Record<string, TLShape | undefined>,
-  //     bindings: Record<string, TLBinding | undefined>
-  //   ) => {
-  //     store.undoManager.stopCapturing();
-  //     store.doc.transact(() => {
-  //       Object.entries(shapes).forEach(([id, shape]) => {
-  //         if (!shape) {
-  //           store.yShapes.delete(id);
-  //         } else {
-  //           store.yShapes.set(shape.id, shape);
-  //         }
-  //       });
-  //       Object.entries(bindings).forEach(([id, binding]) => {
-  //         if (!binding) {
-  //           store.yBindings.delete(id);
-  //         } else {
-  //           store.yBindings.set(binding.id, binding);
-  //         }
-  //       });
-  //     });
-  //   },
-  //   [boardId]
-  // );
+    for (const shape of [...store.yShapes.values()]) {
+      // Only delete shapes that are not in the y.js doc anymore
+      removeSet.delete(shape.id);
+      if (Object.keys(app.data.page.shapes).includes(shape.id)) {
+        update.push(shape);
+      } else {
+        create.push(shape);
+      }
+    }
+    console.table([
+      ...[...create].map((shape) => ({
+        op: "created",
+        id: shape.id,
+        type: shape.type,
+      })),
+      ...[...update].map((shape) => ({
+        op: "updated",
+        id: shape.id,
+        type: shape.type,
+      })),
+      ...[...removeSet].map((shapeId) => ({
+        op: "deleted",
+        id: shapeId,
+      })),
+    ]);
+    app.send("CREATED_SHAPES", { shapes: create });
+    app.send("UPDATED_SHAPES", { shapes: update });
+    app.send("DELETED_SHAPES", { ids: [...removeSet] });
+    // app.send("UPDATED_BINDINGS", store.yBindings.values());
+  };
 
   /**
    * Connect Y.js doc to Tldraw widget and register teardown handlers
@@ -110,7 +109,7 @@ export const useYjsSession = (
       // room.disconnect();
       window.removeEventListener("beforeunload", tearDown);
     };
-  }, [boardId, app]);
+  }, [boardId]);
 
   /**
    * Create a new board and return its id.

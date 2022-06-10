@@ -3,6 +3,7 @@ import type { Action } from "~/src/state/constants";
 import { shapeUtils } from "~/src/shapes";
 import { getPagePoint } from "~/src/state/helpers";
 import { mutables } from "~/src/state/mutables";
+import { publishSelectedShape } from "../network";
 
 export const createPencilShape: Action = (data, payload: TLPointerInfo) => {
   const shape = shapeUtils.pencil.getShape({
@@ -16,5 +17,6 @@ export const createPencilShape: Action = (data, payload: TLPointerInfo) => {
   data.pageState.selectedIds = [shape.id];
 
   mutables.rawPoints = [[0, 0]];
+  console.warn("Set pointed shape", shape.id);
   mutables.pointedShapeId = shape.id;
 };

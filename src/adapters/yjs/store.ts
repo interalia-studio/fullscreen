@@ -1,6 +1,7 @@
 import * as Y from "yjs";
 import { TLBinding, TLShape } from "@tldraw/core";
 import { nanoid } from "nanoid";
+import { shapeUtils } from "~/src/shapes";
 
 export class Doc {
   // A Y.js doc that contains all board contents and metadata.
@@ -44,13 +45,37 @@ export class Doc {
     this.undoManager.redo();
   }
 
-  createShape(value: TLShape): string {
-    const id = nanoid();
+  /**
+   * Insert a single shape into the doc.
+   */
+  createShape(value: TLShape) {
     this.doc.transact(() => {
-      this.yShapes.set(id, value);
-      console.log("Created shape", id);
+      this.yShapes.set(value.id, value);
+      console.log("Created shape", value.id);
     });
-    return id;
+  }
+
+  /**
+   * Update an array of shapes identified by their ID.
+   */
+  updateShapes(shapes: (Partial<TLShape> & Pick<TLShape, "id">)[]) {
+    this.doc.transact(() => {
+      shapes.forEach((shape) => {
+        const prevState = this.yShapes.get(shape.id);
+        this.yShapes.set(shape.id, Object.assign(prevState, shape));
+      });
+      console.log("Updated shapes", shapes);
+    });
+  }
+
+  /**
+   * Delete shapes based on ID.
+   */
+  deleteShapes(ids: string[]) {
+    this.doc.transact(() => {
+      ids.forEach((id) => this.yShapes.delete(id));
+      if (ids.length > 0) console.log("Deleted shapes", [...ids]);
+    });
   }
 }
 

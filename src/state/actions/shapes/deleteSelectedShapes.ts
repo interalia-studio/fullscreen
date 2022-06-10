@@ -1,3 +1,4 @@
+import store from "~/src/adapters/yjs/store";
 import type { Action } from "~/src/state/constants";
 
 export const deleteSelectedShapes: Action = (data) => {
@@ -9,5 +10,6 @@ export const deleteSelectedShapes: Action = (data) => {
     pageState.hoveredId = undefined;
   }
   pageState.selectedIds.forEach((id) => delete page.shapes[id]);
+  store.deleteShapes(pageState.selectedIds);
   pageState.selectedIds = [];
 };

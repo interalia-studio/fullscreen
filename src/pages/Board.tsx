@@ -51,43 +51,43 @@ const Board = () => {
 
   const session = useYjsSession(appState, boardId);
 
-  useEffect(() => {
-    navigate(`/board/${appState.data.id}`);
-  }, [appState.data.id]);
+  // useEffect(() => {
+  //   navigate(`/board/${appState.data.id}`);
+  // }, [appState.data.id]);
 
-  const handleNewProject = () => {
-    appState.send("RESET");
-  };
+  // const handleNewProject = () => {
+  //   appState.send("RESET");
+  // };
 
-  const handleOpenProject = async () => {
-    const fileContents = await fileSystem.openFile();
-    const newBoardId = api.loadDocument(fileContents);
-    appState.send("LOADED_DOCUMENT", fileContents);
+  // const handleOpenProject = async () => {
+  //   const fileContents = await fileSystem.openFile();
+  //   const newBoardId = api.loadDocument(fileContents);
+  //   appState.send("LOADED_DOCUMENT", fileContents);
 
-    navigate(`/board/${newBoardId}`);
-  };
+  //   navigate(`/board/${newBoardId}`);
+  // };
 
-  const handleSaveProject = async () => {
-    const fileContents = api.serialiseDocument();
-    await fileSystem.saveFile(fileContents);
-  };
+  // const handleSaveProject = async () => {
+  //   const fileContents = api.serialiseDocument();
+  //   await fileSystem.saveFile(fileContents);
+  // };
 
   /**
    * Setup Tauri event handlers on mount
    */
-  useEffect(() => {
-    if (isNativeApp()) {
-      appWindow.listen("tauri://menu", ({ windowLabel, payload }) => {
-        switch (payload) {
-          case "open":
-            handleOpenProject();
-            break;
-          case "save":
-            handleSaveProject();
-        }
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (isNativeApp()) {
+  //     appWindow.listen("tauri://menu", ({ windowLabel, payload }) => {
+  //       switch (payload) {
+  //         case "open":
+  //           handleOpenProject();
+  //           break;
+  //         case "save":
+  //           handleSaveProject();
+  //       }
+  //     });
+  //   }
+  // }, []);
 
   return (
     <main>

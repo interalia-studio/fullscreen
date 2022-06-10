@@ -287,11 +287,11 @@ export const machine = createState({
           },
         },
         creating: {
-          onEnter: ["createPencilShape", "setSnapshot"],
+          onEnter: ["createPencilShape", "setSnapshot", "publishSelectedShape"],
           on: {
-            TOGGLED_MODIFIER: "extendPencilShape",
-            MOVED_POINTER: "extendPencilShape",
-            PANNED: "extendPencilShape",
+            TOGGLED_MODIFIER: ["extendPencilShape"],
+            MOVED_POINTER: ["extendPencilShape"],
+            PANNED: ["extendPencilShape"],
             CANCELLED: {
               do: "deleteSelectedShapes",
             },
@@ -327,7 +327,7 @@ export const machine = createState({
           },
         },
         creating: {
-          onEnter: ["createBoxShape", "setSnapshot"],
+          onEnter: ["createBoxShape", "setSnapshot", "publishSelectedShape"],
           on: {
             TOGGLED_MODIFIER: "transformSelectedShapes",
             MOVED_POINTER: "transformSelectedShapes",

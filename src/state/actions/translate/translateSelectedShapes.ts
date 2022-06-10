@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 import { Action, CustomBinding, SNAP_DISTANCE } from "~/src/state/constants";
 import { getPagePoint } from "~/src/state/helpers";
 import { mutables } from "~/src/state/mutables";
+import { publishUpdateSelected } from "../network";
 
 export const translateSelectedShapes: Action = (
   data,
@@ -119,4 +120,5 @@ export const translateSelectedShapes: Action = (
     const shape = data.page.shapes[id];
     shape.point = Vec.add(initialShape.point, delta);
   });
+  publishUpdateSelected(data);
 };

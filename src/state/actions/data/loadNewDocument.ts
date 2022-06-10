@@ -34,7 +34,7 @@ export const loadNewDocument: Action = (data) => {
 
   const snapshot = current(data);
 
-  mutables.history.reset(snapshot);
+  // mutables.history.reset(snapshot);
 
   Object.assign(mutables, {
     snapshot,
