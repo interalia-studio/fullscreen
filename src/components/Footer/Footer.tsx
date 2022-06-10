@@ -5,19 +5,19 @@ export const Footer = () => (
     <div className="row">
       <div className="column">
         <img
-          src="https://github.com/kirakirawes/cat-codes/blob/32c79f90e8260ad294329a9ed957da193224bdec/bmbf-10.png?raw=true"
+          src="assets/images/logo-bmbf.svg"
           className="logo"
         />
       </div>
       <div className="column">
         <img
-          src="https://github.com/kirakirawes/cat-codes/blob/32c79f90e8260ad294329a9ed957da193224bdec/okfn-11.png?raw=true"
+          src="assets/images/logo-okfn.svg"
           className="logo"
         />
       </div>
       <div className="column">
         <img
-          src="https://raw.githubusercontent.com/kirakirawes/cat-codes/main/sign%20(small)_sign.png"
+          src="assets/images/signature_sign2.png"
           className="signature"
           alt="Web2.0"
         />
