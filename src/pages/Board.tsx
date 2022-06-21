@@ -7,7 +7,7 @@ import { useYjsSession } from "~/src/adapters/yjs";
 import fileSystem from "~/src/lib/fileSystem";
 import { isNativeApp } from "~/src/lib/tauri";
 import store from "~/src/adapters/yjs/store";
-import TLDrawWidget from "~/src/components/Canvas";
+import Canvas from "~/src/components/Canvas";
 import Toolbar from "~/src/components/Toolbar";
 import { machine } from "~/src/state/machine";
 import { Api } from "~/src/state/api";
@@ -92,7 +92,7 @@ const Board = () => {
   return (
     <main>
       <Toolbar activeStates={appState.active} lastEvent={appState.log[0]} />
-      <TLDrawWidget
+      <Canvas
         appState={appState}
         hideBounds={hideBounds}
         hideResizeHandles={hideResizeHandles}
