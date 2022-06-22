@@ -7,8 +7,9 @@ import { useYjsSession } from "~/src/adapters/yjs";
 import fileSystem from "~/src/lib/fileSystem";
 import { isNativeApp } from "~/src/lib/tauri";
 import store from "~/src/adapters/yjs/store";
-import TLDrawWidget from "~/src/components/Canvas";
+import Canvas from "~/src/components/Canvas";
 import Toolbar from "~/src/components/Toolbar";
+import StatusBar from "~/src/components/StatusBar";
 import { machine } from "~/src/state/machine";
 import { Api } from "~/src/state/api";
 import { shapeUtils } from "~/src/shapes";
@@ -49,28 +50,32 @@ const Board = () => {
   //   [boardId]
   // );
 
-  // const session = useYjsSession(app, boardId);
+  const session = useYjsSession(appState, boardId);
+
+  // useEffect(() => {
+  //   navigate(`/board/${appState.data.id}`);
+  // }, [appState.data.id]);
 
   // const handleNewProject = () => {
-  //   const newBoardId = session.createDocument();
-  //   navigate(`/board/${newBoardId}`);
+  //   appState.send("RESET");
   // };
 
   // const handleOpenProject = async () => {
   //   const fileContents = await fileSystem.openFile();
-  //   const newBoardId = session.loadDocument(fileContents);
+  //   const newBoardId = api.loadDocument(fileContents);
+  //   appState.send("LOADED_DOCUMENT", fileContents);
 
   //   navigate(`/board/${newBoardId}`);
   // };
 
   // const handleSaveProject = async () => {
-  //   const fileContents = session.serialiseDocument();
+  //   const fileContents = api.serialiseDocument();
   //   await fileSystem.saveFile(fileContents);
   // };
 
-  // /**
-  //  * Setup Tauri event handlers on mount
-  //  */
+  /**
+   * Setup Tauri event handlers on mount
+   */
   // useEffect(() => {
   //   if (isNativeApp()) {
   //     appWindow.listen("tauri://menu", ({ windowLabel, payload }) => {
@@ -84,15 +89,17 @@ const Board = () => {
   //     });
   //   }
   // }, []);
-
+  
   return (
     <main>
-      <Toolbar activeStates={appState.active} lastEvent={appState.log[0]} />
-      <TLDrawWidget
+      <Toolbar  />
+      <Canvas
         appState={appState}
         hideBounds={hideBounds}
         hideResizeHandles={hideResizeHandles}
       />
+
+      <StatusBar activeStates={appState.active} lastEvent={appState.log[0]} />
     </main>
   );
 };

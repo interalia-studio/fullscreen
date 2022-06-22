@@ -1,4 +1,4 @@
-import { TDUser, TldrawApp } from "@tldraw/tldraw";
+import { TDUser, TldrawApp } from "@tldraw/core";
 import { Room } from "@y-presence/client";
 import { WebsocketProvider } from "y-websocket";
 

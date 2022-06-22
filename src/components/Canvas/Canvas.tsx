@@ -6,10 +6,12 @@ import { styled } from "~/src/theme";
 import { Api } from "~/src/state/api";
 import * as handlers from "./handlers";
 
+import type { CanvasState } from "~/src/types";
+
 declare const window: Window & { api: Api };
 
 export type CanvasProps = {
-  appState: any;
+  appState: CanvasState;
   hideBounds: boolean;
   hideResizeHandles: boolean;
 };
@@ -27,7 +29,8 @@ export const Canvas = ({
         pageState={appState.data.pageState} // Required
         performanceMode={appState.data.performanceMode}
         meta={appState.data.meta}
-        snapLines={appState.data.overlays.snapLines}
+        // snapLines={appState.data.overlays.snapLines}
+        snapLines={appState.data.snapLines}
         onPointShape={handlers.onPointShape}
         onPointBounds={handlers.onPointBounds}
         onPointCanvas={handlers.onPointCanvas}

@@ -1,9 +1,11 @@
 import { TLBoundsCorner, TLPointerInfo, Utils } from "@tldraw/core";
 import Vec from "@tldraw/vec";
-import { shapeUtils } from "shapes";
 import type { Action } from "~/src/state/constants";
 import { getPagePoint } from "~/src/state/helpers";
 import { mutables } from "~/src/state/mutables";
+import { publishUpdate } from "../network";
+import { throttle } from "lodash";
+import store from "~/src/adapters/yjs/store";
 
 export const extendPencilShape: Action = (data, payload: TLPointerInfo) => {
   const { initialPoint, previousPoint, rawPoints, pointedShapeId } = mutables;
@@ -13,7 +15,7 @@ export const extendPencilShape: Action = (data, payload: TLPointerInfo) => {
   const shape = data.page.shapes[pointedShapeId!];
 
   if (!shape || shape.type !== "pencil") {
-    throw Error("We should have a selected pencil shape.");
+    throw Error("We should have a selected pencil shape. " + pointedShapeId);
   }
 
   // The point relative to the initial point
@@ -28,4 +30,6 @@ export const extendPencilShape: Action = (data, payload: TLPointerInfo) => {
   const offset = Utils.getCommonTopLeft(rawPoints);
   shape.point = Vec.add(initialPoint, offset);
   shape.points = rawPoints.map((point) => Vec.sub(point, offset));
+
+  publishUpdate(data, { shapes: [shape] });
 };

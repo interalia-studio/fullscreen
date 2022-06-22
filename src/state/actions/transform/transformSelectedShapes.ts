@@ -1,6 +1,7 @@
 import type { TLPointerInfo } from "@tldraw/core";
 import type { Action } from "~/src/state/constants";
 import { mutables } from "~/src/state/mutables";
+import { publishUpdateSelected } from "../network";
 import { resizeSelectedShapes } from "./resizeSelectedShapes";
 import { rotateSelectedShapes } from "./rotateSelectedShapes";
 
@@ -15,4 +16,5 @@ export const transformSelectedShapes: Action = (
   } else {
     resizeSelectedShapes(data, payload);
   }
+  publishUpdateSelected(data);
 };

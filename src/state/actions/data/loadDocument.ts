@@ -7,7 +7,7 @@ export const loadDocument: Action = (data, payload: { doc: AppDocument }) => {
 
   const snapshot = current(data);
 
-  mutables.history.reset(snapshot);
+  // mutables.history.reset(snapshot);
 
   Object.assign(mutables, {
     snapshot,

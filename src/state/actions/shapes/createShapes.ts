@@ -8,14 +8,18 @@ export const createShapes: Action = (
 ) => {
   try {
     payload.shapes.forEach((partial, i) => {
-      const shape = getShapeUtils(partial.type).getShape({
-        id: nanoid(),
-        childIndex: Object.values(data.page.shapes).length,
-        ...partial,
-        parentId: "page1",
-      });
+      if (Object.keys(shapeUtils).includes(partial.type)) {
+        const shape = getShapeUtils(partial.type).getShape({
+          id: nanoid(),
+          childIndex: Object.values(data.page.shapes).length,
+          ...partial,
+          parentId: "page1",
+        });
 
-      data.page.shapes[shape.id] = shape;
+        data.page.shapes[shape.id] = shape;
+      } else {
+        console.warn("Ignoring shape type", partial.type);
+      }
     });
   } catch (e: any) {
     e.message = "Could not create shapes: " + e.message;

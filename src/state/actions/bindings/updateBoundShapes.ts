@@ -1,7 +1,7 @@
 import { TLBinding, Utils } from "@tldraw/core";
 import { intersectLineSegmentBounds } from "@tldraw/intersect";
 import Vec from "@tldraw/vec";
-import type { ArrowShape } from "shapes/arrow";
+import type { ArrowShape } from "~/src/shapes/arrow";
 import type { Action } from "~/src/state/constants";
 import { getBoundHandlePoint } from "./getBoundHandlePoint";
 

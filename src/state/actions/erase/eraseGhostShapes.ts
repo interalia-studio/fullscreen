@@ -1,4 +1,5 @@
 import type { Action } from "~/src/state/constants";
+import { publishDelete, publishDeleteSelected } from "../network";
 
 export const eraseGhostShapes: Action = (data) => {
   const idsToDelete = Object.values(data.page.shapes)
@@ -10,6 +11,8 @@ export const eraseGhostShapes: Action = (data) => {
   data.pageState.selectedIds = data.pageState.selectedIds.filter(
     (id) => !idsToDelete.includes(id)
   );
+
+  publishDelete(data, { ids: idsToDelete });
 
   if (
     data.pageState.hoveredId &&

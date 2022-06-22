@@ -1,4 +1,4 @@
-import { TDBinding, TDShape, TDUser, TldrawApp } from "@tldraw/tldraw";
+import { TLBinding, TLShape, TLUser } from "@tldraw/core";
 import { useCallback, useEffect, useState, useMemo } from "react";
 import { v4 as uuid } from "uuid";
 import { WebsocketProvider } from "y-websocket";
@@ -8,6 +8,9 @@ import { FileProvider } from "./fileProvider";
 import Presence from "./presence";
 import store from "./store";
 import { FSAdapter } from "../../types";
+import { Shape } from "~/src/shapes";
+import { Api } from "~/src/state/api";
+import { machine } from "~/src/state/machine";
 
 /**
  * A `YjsSession` uses a Websocket connection to a relay server to sync document
@@ -15,13 +18,16 @@ import { FSAdapter } from "../../types";
  *
  * It can serialise and deserialise to a binary format.
  */
-export const useYjsSession = (app: TldrawApp, boardId: string): FSAdapter => {
+export const useYjsSession = (
+  app: typeof machine,
+  boardId: string
+): FSAdapter => {
   // This is false until the page state has been loaded from yjs
   const [isLoading, setLoading] = useState(true);
 
   // @TODO: Connect file provider to file handle after saving from a browser that
   // implements the Filesystem Access API in order to auto-save.
-  const localProvider = useMemo(() => new FileProvider(store.doc), [boardId]);
+  // const localProvider = useMemo(() => new FileProvider(store.doc), [boardId]);
 
   const networkProvider = useMemo(
     () =>
@@ -36,46 +42,45 @@ export const useYjsSession = (app: TldrawApp, boardId: string): FSAdapter => {
     [boardId]
   );
 
-  const room = useMemo(() => new Presence(networkProvider), [networkProvider]);
+  // const room = useMemo(() => new Presence(networkProvider), [networkProvider]);
 
   /**
    * Replaces the full Tldraw document with shapes and bindings from y.js.
    */
   const replacePageWithDocState = () => {
-    const shapes = Object.fromEntries(store.yShapes.entries());
-    const bindings = Object.fromEntries(store.yBindings.entries());
-    app.replacePageContent(shapes, bindings, {});
-  };
+    let create = [],
+      update = [],
+      removeSet = new Set(Object.keys(app.data.page.shapes));
 
-  /**
-   * Handle changes made through the TLDraw widget.
-   */
-  const handleChangePage = useCallback(
-    (
-      _app: TldrawApp,
-      shapes: Record<string, TDShape | undefined>,
-      bindings: Record<string, TDBinding | undefined>
-    ) => {
-      store.undoManager.stopCapturing();
-      store.doc.transact(() => {
-        Object.entries(shapes).forEach(([id, shape]) => {
-          if (!shape) {
-            store.yShapes.delete(id);
-          } else {
-            store.yShapes.set(shape.id, shape);
-          }
-        });
-        Object.entries(bindings).forEach(([id, binding]) => {
-          if (!binding) {
-            store.yBindings.delete(id);
-          } else {
-            store.yBindings.set(binding.id, binding);
-          }
-        });
-      });
-    },
-    [boardId]
-  );
+    for (const shape of [...store.yShapes.values()]) {
+      // Only delete shapes that are not in the y.js doc anymore
+      removeSet.delete(shape.id);
+      if (Object.keys(app.data.page.shapes).includes(shape.id)) {
+        update.push(shape);
+      } else {
+        create.push(shape);
+      }
+    }
+    console.table([
+      ...[...create].map((shape) => ({
+        op: "created",
+        id: shape.id,
+        type: shape.type,
+      })),
+      ...[...update].map((shape) => ({
+        op: "updated",
+        id: shape.id,
+        type: shape.type,
+      })),
+      ...[...removeSet].map((shapeId) => ({
+        op: "deleted",
+        id: shapeId,
+      })),
+    ]);
+    app.send("CREATED_SHAPES", { shapes: create });
+    app.send("UPDATED_SHAPES", { shapes: update });
+    app.send("DELETED_SHAPES", { ids: [...removeSet] });
+  };
 
   /**
    * Connect Y.js doc to Tldraw widget and register teardown handlers
@@ -83,7 +88,7 @@ export const useYjsSession = (app: TldrawApp, boardId: string): FSAdapter => {
   useEffect(() => {
     if (!app) return;
 
-    room.connect(app);
+    // room.connect(app);
 
     async function setup() {
       store.yShapes.observeDeep(replacePageWithDocState);
@@ -100,10 +105,10 @@ export const useYjsSession = (app: TldrawApp, boardId: string): FSAdapter => {
     setup();
 
     return () => {
-      room.disconnect();
+      // room.disconnect();
       window.removeEventListener("beforeunload", tearDown);
     };
-  }, [boardId, app]);
+  }, [boardId]);
 
   /**
    * Create a new board and return its id.
@@ -137,6 +142,21 @@ export const useYjsSession = (app: TldrawApp, boardId: string): FSAdapter => {
     return boardId;
   };
 
+  const handleCreateShape = (id: string, data: TLShape) => {
+    store.undoManager.stopCapturing();
+    store.yShapes.set(id, data);
+  };
+
+  const handleUpdateShape = (id: string, data: TLShape) => {
+    store.undoManager.stopCapturing();
+    store.yShapes.set(id, data);
+  };
+
+  const handleDeleteShape = (id: string) => {
+    store.undoManager.stopCapturing();
+    store.yShapes.delete(id);
+  };
+
   /**
    * Returns a binary representation of the y.js document.
    */
@@ -148,21 +168,25 @@ export const useYjsSession = (app: TldrawApp, boardId: string): FSAdapter => {
     loadDocument,
     serialiseDocument,
     eventHandlers: {
-      onChangePage: handleChangePage,
+      handleCreateShape,
+      handleUpdateShape,
+      handleDeleteShape,
 
-      onUndo: useCallback(() => {
-        store.undo();
-      }, [boardId]),
+      // onChangePage: handleChangePage,
 
-      onRedo: useCallback(() => {
-        store.redo();
-      }, [boardId]),
+      // onUndo: useCallback(() => {
+      //   store.undo();
+      // }, [boardId]),
 
-      onChangePresence: useCallback(
-        (app: TldrawApp, user: TDUser) =>
-          app && room.update(app.room.userId, user),
-        [room]
-      ),
+      // onRedo: useCallback(() => {
+      //   store.redo();
+      // }, [boardId]),
+
+      // onChangePresence: useCallback(
+      //   (app: TldrawApp, user: TLUser) =>
+      //     app && room.update(app.room.userId, user),
+      //   [room]
+      // ),
     },
   };
 };

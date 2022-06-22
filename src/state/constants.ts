@@ -7,6 +7,7 @@ import type {
 } from "@tldraw/core";
 import type { Shape } from "../shapes";
 import type { S } from "@state-designer/react";
+import { nanoid } from "nanoid";
 
 export const VERSION = 1;
 export const PERSIST_DATA = true;
@@ -18,71 +19,77 @@ export interface CustomBinding extends TLBinding {
   handleId: "start" | "end";
 }
 
+// export const INITIAL_PAGE: TLPage<Shape, CustomBinding> = {
+//   id: "page1",
+//   shapes: {
+//     box1: {
+//       id: "box1",
+//       type: "box",
+//       parentId: "page1",
+//       name: "Box",
+//       childIndex: 1,
+//       point: [100, 100],
+//       size: [100, 100],
+//     },
+//     box2: {
+//       id: "box2",
+//       type: "box",
+//       parentId: "page1",
+//       name: "Box",
+//       childIndex: 2,
+//       point: [250, 200],
+//       size: [100, 100],
+//     },
+//     box3: {
+//       id: "box3",
+//       type: "box",
+//       parentId: "page1",
+//       name: "Box",
+//       childIndex: 3,
+//       point: [150, 400],
+//       size: [100, 100],
+//     },
+//     arrow1: {
+//       id: "arrow1",
+//       type: "arrow",
+//       parentId: "page1",
+//       name: "Arrow",
+//       childIndex: 3,
+//       point: [231, 312],
+//       handles: {
+//         start: {
+//           id: "start",
+//           index: 1,
+//           point: [38, 0],
+//         },
+//         end: {
+//           id: "end",
+//           index: 2,
+//           point: [0, 76],
+//         },
+//       },
+//     },
+//   },
+//   bindings: {
+//     binding1: {
+//       id: "binding1",
+//       fromId: "arrow1",
+//       toId: "box2",
+//       handleId: "start",
+//     },
+//     binding2: {
+//       id: "binding2",
+//       fromId: "arrow1",
+//       toId: "box3",
+//       handleId: "end",
+//     },
+//   },
+// };
+
 export const INITIAL_PAGE: TLPage<Shape, CustomBinding> = {
   id: "page1",
-  shapes: {
-    box1: {
-      id: "box1",
-      type: "box",
-      parentId: "page1",
-      name: "Box",
-      childIndex: 1,
-      point: [100, 100],
-      size: [100, 100],
-    },
-    box2: {
-      id: "box2",
-      type: "box",
-      parentId: "page1",
-      name: "Box",
-      childIndex: 2,
-      point: [250, 200],
-      size: [100, 100],
-    },
-    box3: {
-      id: "box3",
-      type: "box",
-      parentId: "page1",
-      name: "Box",
-      childIndex: 3,
-      point: [150, 400],
-      size: [100, 100],
-    },
-    arrow1: {
-      id: "arrow1",
-      type: "arrow",
-      parentId: "page1",
-      name: "Arrow",
-      childIndex: 3,
-      point: [231, 312],
-      handles: {
-        start: {
-          id: "start",
-          index: 1,
-          point: [38, 0],
-        },
-        end: {
-          id: "end",
-          index: 2,
-          point: [0, 76],
-        },
-      },
-    },
-  },
-  bindings: {
-    binding1: {
-      id: "binding1",
-      fromId: "arrow1",
-      toId: "box2",
-      handleId: "start",
-    },
-    binding2: {
-      id: "binding2",
-      fromId: "arrow1",
-      toId: "box3",
-      handleId: "end",
-    },
-  },
+  shapes: {},
+  bindings: {},
 };
 
 export const INITIAL_PAGE_STATE: TLPageState = {
@@ -100,7 +107,7 @@ export const INITIAL_PAGE_STATE: TLPageState = {
 };
 
 export const INITIAL_DATA = {
-  id: "myDocument",
+  id: null,
   version: VERSION,
   page: INITIAL_PAGE,
   pageState: INITIAL_PAGE_STATE,

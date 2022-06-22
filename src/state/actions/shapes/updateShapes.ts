@@ -1,13 +1,14 @@
-import type { Shape } from "shapes";
+import { Shape, shapeUtils } from "~/src/shapes";
 import type { Action } from "~/src/state/constants";
 
-export const updateShapes: Action = (
-  data,
-  payload: { shapes: (Partial<Shape> & Pick<Shape, "id">)[] }
-) => {
+export const updateShapes: Action = (data, { shapes }) => {
   try {
-    payload.shapes.forEach((partial, i) => {
-      Object.assign(data.page.shapes[partial.id], partial);
+    shapes.forEach((partial, i) => {
+      if (Object.keys(shapeUtils).includes(partial.type)) {
+        Object.assign(data.page.shapes[partial.id], partial);
+      } else {
+        console.warn("Ignoring shape type", partial.type);
+      }
     });
   } catch (e: any) {
     e.message = "Could not update shapes: " + e.message;
