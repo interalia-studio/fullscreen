@@ -29,14 +29,16 @@ const ToolbarContainer = styled("div", {
   gridTemplateRows: "auto auto",
   gridRowGap: "$5",
   position: "fixed",
-  bottom: "0",
-  width: "100%",
-  zIndex: "100",
+  left: "0",
+  height: "100%",
+  zIndex: "101",
 });
 
 const PrimaryTools = styled("div", {
   display: "flex",
-  width: "fit-content",
+  height: "fit-content",
+  margin: "auto",
+  flexDirection: "column",
   borderRadius: "100px",
   border: "1px solid $border",
   overflow: "hidden",
