@@ -125,15 +125,6 @@ export const onKeyDown: TLKeyboardEventHandler = (key, info, e) => {
       machine.send("SELECTED_TOOL", { name: "eraser" });
       break;
     }
-    case "a": {
-      if (info.metaKey || info.ctrlKey) {
-        machine.send("SELECTED_ALL");
-        e.preventDefault();
-      } else {
-        machine.send("SELECTED_TOOL", { name: "arrow" });
-      }
-      break;
-    }
     case "z": {
       if (info.metaKey || info.ctrlKey) {
         if (info.shiftKey) {

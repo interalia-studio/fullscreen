@@ -44,15 +44,6 @@ export const Toolbar = () => {
             <Square />
           </Highlight>
         </PrimaryToolButton>
-        <PrimaryToolButton
-          id="arrow"
-          isActive={machine.isIn("arrow")}
-          onClick={onToolSelect}
-        >
-          <Highlight>
-            <ArrowUpRight />
-          </Highlight>
-        </PrimaryToolButton>
       </PrimaryTools>
     </ToolbarContainer>
   );
