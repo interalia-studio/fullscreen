@@ -4,7 +4,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useStateDesigner } from "@state-designer/react";
 
 import { useYjsSession } from "~/src/adapters/yjs";
-import TLDrawWidget from "~/src/components/Canvas";
+import fileSystem from "~/src/lib/fileSystem";
+import { isNativeApp } from "~/src/lib/tauri";
+import store from "~/src/adapters/yjs/store";
+import Canvas from "~/src/components/Canvas";
 import Toolbar from "~/src/components/Toolbar";
 import StatusBar from "~/src/components/StatusBar";
 import { machine } from "~/src/state/machine";
@@ -90,7 +93,7 @@ const Board = () => {
   return (
     <main>
       <Toolbar  />
-      <TLDrawWidget
+      <Canvas
         appState={appState}
         hideBounds={hideBounds}
         hideResizeHandles={hideResizeHandles}
