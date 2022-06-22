@@ -121,10 +121,6 @@ export const onKeyDown: TLKeyboardEventHandler = (key, info, e) => {
       machine.send("SELECTED_TOOL", { name: "box" });
       break;
     }
-    case "d": {
-      machine.send("SELECTED_TOOL", { name: "pencil" });
-      break;
-    }
     case "e": {
       machine.send("SELECTED_TOOL", { name: "eraser" });
       break;

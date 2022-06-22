@@ -80,7 +80,6 @@ export const useYjsSession = (
     app.send("CREATED_SHAPES", { shapes: create });
     app.send("UPDATED_SHAPES", { shapes: update });
     app.send("DELETED_SHAPES", { ids: [...removeSet] });
-    // app.send("UPDATED_BINDINGS", store.yBindings.values());
   };
 
   /**

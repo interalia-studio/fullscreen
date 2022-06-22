@@ -13,9 +13,6 @@ export class Doc {
   // Reference to Tldraw shapes.
   yShapes: Y.Map<TLShape>;
 
-  // Reference to bindings between Tldraw shapes.
-  yBindings: Y.Map<TLBinding>;
-
   // Manages undo and redo state/actions.
   undoManager: Y.UndoManager;
 
@@ -32,9 +29,8 @@ export class Doc {
     this.doc = new Y.Doc();
     if (initialUpdate) Y.applyUpdate(this.doc, initialUpdate);
     this.yShapes = this.doc.getMap("shapes");
-    this.yBindings = this.doc.getMap("bindings");
     this.board = this.doc.getMap("board");
-    this.undoManager = new Y.UndoManager([this.yShapes, this.yBindings]);
+    this.undoManager = new Y.UndoManager([this.yShapes]);
   }
 
   undo() {
