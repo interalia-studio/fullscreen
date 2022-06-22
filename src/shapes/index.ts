@@ -1,19 +1,16 @@
 import type { CustomShapeUtil } from "./CustomShapeUtil";
 import { ArrowShape, ArrowUtil } from "./arrow";
 import { BoxShape, BoxUtil } from "./box";
-import { PencilShape, PencilUtil } from "./pencil";
 import { TLShapeUtilsMap } from "@tldraw/core";
 
 export * from "./arrow";
-export * from "./pencil";
 export * from "./box";
 
-export type Shape = BoxShape | ArrowShape | PencilShape;
+export type Shape = BoxShape | ArrowShape;
 
 export const shapeUtils: TLShapeUtilsMap<Shape> = {
   box: new BoxUtil(),
-  arrow: new ArrowUtil(),
-  pencil: new PencilUtil(),
+  arrow: new ArrowUtil()
 };
 
 export const getShapeUtils = <T extends Shape>(shape: T | T["type"]) => {
