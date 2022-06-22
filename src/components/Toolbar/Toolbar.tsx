@@ -9,20 +9,11 @@ import {
 import { machine } from "~/src/state/machine";
 import { styled } from "~/src/theme";
 
-interface ToolbarProps {
-  activeStates: string[];
-  lastEvent: string;
-}
-
 const onToolSelect = (e: React.MouseEvent) => {
   machine.send("SELECTED_TOOL", { name: e.currentTarget.id });
 };
 
-const onReset = () => {
-  machine.send("RESET");
-};
-
-export const Toolbar = ({ activeStates, lastEvent }: ToolbarProps) => {
+export const Toolbar = () => {
   return (
     <ToolbarContainer>
       <PrimaryTools>
@@ -63,19 +54,6 @@ export const Toolbar = ({ activeStates, lastEvent }: ToolbarProps) => {
           </Highlight>
         </PrimaryToolButton>
       </PrimaryTools>
-      <StatusBar>
-        <div>
-          <button onClick={onReset}>Reset</button>
-          {activeStates
-            .slice(1)
-            .map((name) => {
-              const state = name.split(".");
-              return state[state.length - 1];
-            })
-            .join(" - ")}
-        </div>
-        <div>{lastEvent}</div>
-      </StatusBar>
     </ToolbarContainer>
   );
 };
@@ -86,14 +64,16 @@ const ToolbarContainer = styled("div", {
   gridTemplateRows: "auto auto",
   gridRowGap: "$5",
   position: "fixed",
-  bottom: "0",
-  width: "100%",
+  left: "0",
+  height: "100%",
   zIndex: "101",
 });
 
 const PrimaryTools = styled("div", {
   display: "flex",
-  width: "fit-content",
+  height: "fit-content",
+  margin: "auto",
+  flexDirection: "column",
   borderRadius: "100px",
   border: "1px solid $border",
   overflow: "hidden",
@@ -144,28 +124,5 @@ const PrimaryToolButton = styled("button", {
         },
       },
     },
-  },
-});
-
-const StatusBar = styled("div", {
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "space-between",
-  padding: "8px 12px",
-  borderTop: "1px solid $border",
-  fontSize: "$1",
-  fontWeight: "$1",
-  backgroundColor: "$background",
-  overflow: "hidden",
-  whiteSpace: "nowrap",
-
-  "& button": {
-    background: "none",
-    border: "1px solid $text",
-    borderRadius: 3,
-    marginRight: "$3",
-    fontFamily: "inherit",
-    fontSize: "inherit",
-    cursor: "pointer",
   },
 });

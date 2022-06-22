@@ -4,11 +4,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useStateDesigner } from "@state-designer/react";
 
 import { useYjsSession } from "~/src/adapters/yjs";
-import fileSystem from "~/src/lib/fileSystem";
-import { isNativeApp } from "~/src/lib/tauri";
-import store from "~/src/adapters/yjs/store";
 import TLDrawWidget from "~/src/components/Canvas";
 import Toolbar from "~/src/components/Toolbar";
+import StatusBar from "~/src/components/StatusBar";
 import { machine } from "~/src/state/machine";
 import { Api } from "~/src/state/api";
 import { shapeUtils } from "~/src/shapes";
@@ -88,15 +86,17 @@ const Board = () => {
   //     });
   //   }
   // }, []);
-
+  
   return (
     <main>
-      <Toolbar activeStates={appState.active} lastEvent={appState.log[0]} />
+      <Toolbar  />
       <TLDrawWidget
         appState={appState}
         hideBounds={hideBounds}
         hideResizeHandles={hideResizeHandles}
       />
+
+      <StatusBar activeStates={appState.active} lastEvent={appState.log[0]} />
     </main>
   );
 };
