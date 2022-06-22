@@ -14,6 +14,10 @@ export const extendPencilShape: Action = (data, payload: TLPointerInfo) => {
 
   const shape = data.page.shapes[pointedShapeId!];
 
+  if (!shape || shape.type !== "pencil") {
+    throw Error("We should have a selected pencil shape. " + pointedShapeId);
+  }
+
   // The point relative to the initial point
   const relativePoint = Vec.sub(mutables.currentPoint, initialPoint);
 

@@ -1,7 +1,9 @@
 import * as React from "react";
 import {
   ArrowUpRight,
+  Edit2,
   MousePointer,
+  PenTool,
   Square,
   X,
 } from "react-feather";
@@ -33,6 +35,15 @@ export const Toolbar = () => {
         >
           <Highlight>
             <X />
+          </Highlight>
+        </PrimaryToolButton>
+        <PrimaryToolButton
+          id="pencil"
+          isActive={machine.isIn("pencil")}
+          onClick={onToolSelect}
+        >
+          <Highlight>
+            <Edit2 />
           </Highlight>
         </PrimaryToolButton>
         <PrimaryToolButton
