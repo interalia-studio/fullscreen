@@ -38,15 +38,6 @@ export const Toolbar = () => {
           </Highlight>
         </PrimaryToolButton>
         <PrimaryToolButton
-          id="pencil"
-          isActive={machine.isIn("pencil")}
-          onClick={onToolSelect}
-        >
-          <Highlight>
-            <Edit2 />
-          </Highlight>
-        </PrimaryToolButton>
-        <PrimaryToolButton
           id="box"
           isActive={machine.isIn("box")}
           onClick={onToolSelect}
