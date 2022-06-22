@@ -303,6 +303,31 @@ export const machine = createState({
         },
       },
     },
+    sticky: {
+      onEnter: "setTransformPerformanceMode",
+      initial: "idle",
+      states: {
+        idle: {
+          on: {
+            STARTED_POINTING: {
+              do: "setInitialPoint",
+              to: "sticky.creating",
+            },
+            CANCELLED: {
+              to: "select",
+            },
+          },
+        },
+        creating: {
+          onEnter: ["createStickyShape", "setSnapshot", "publishSelectedShape"],
+          on: {
+            STOPPED_POINTING: {
+              to: "select",
+            },
+          },
+        },
+      },
+    },
     box: {
       onEnter: "setTransformPerformanceMode",
       initial: "idle",

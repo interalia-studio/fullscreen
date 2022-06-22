@@ -5,6 +5,9 @@ import { TextAreaUtils } from '~/src/lib/TextAreaUtils'
 import { getBoundsRectangle } from '~/src/lib/getBoundsRectange'
 import { Utils, HTMLContainer, TLBounds } from '@tldraw/core'
 import { GHOSTED_OPACITY } from '~/src/state/constants'
+import { intersectLineSegmentPolyline, intersectLineSegmentBounds, } from '@tldraw/intersect'
+import { nanoid } from 'nanoid'
+
 
 import { styled } from "~/src/theme";
 import { getTextSvgElement } from '../shared/getTextSvgElement'
@@ -74,13 +77,31 @@ export class StickyUtil extends FSShapeUtil<T, E> {
 
   showCloneHandles = true
 
+  getCenter = (shape: T) => {
+    return Utils.getBoundsCenter(this.getBounds(shape))
+  }
+
+  hitTestLineSegment = (shape: T, A: number[], B: number[]): boolean => {
+    const box = Utils.getBoundsFromPoints([A, B])
+    const bounds = this.getBounds(shape)
+
+    return Utils.boundsContain(bounds, box) || shape.rotation
+      ? intersectLineSegmentPolyline(A, B, Utils.getRotatedCorners(this.getBounds(shape)))
+          .didIntersect
+      : intersectLineSegmentBounds(A, B, this.getBounds(shape)).length > 0
+  }
+
+  hitTestPoint = (shape: T, point: number[]): boolean => {
+    return Utils.pointInBounds(point, this.getRotatedBounds(shape))
+  }
+
   getShape = (props: Partial<T>): T => {
     return Utils.deepMerge<T>(
       {
-        id: 'id',
+        id: nanoid(),
         type: 'sticky',
         name: 'Sticky',
-        parentId: 'page',
+        parentId: 'page1',
         childIndex: 1,
         point: [0, 0],
         size: [200, 200],
@@ -90,6 +111,10 @@ export class StickyUtil extends FSShapeUtil<T, E> {
       },
       props
     )
+  }
+
+  transform = () => {
+
   }
 
   Component = TLShapeUtil.Component<T, E>(

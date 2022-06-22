@@ -1,6 +1,6 @@
-import type { TLShape } from '@tldraw/core'
+import type { FSBaseShape } from "../FSShapeUtil"
 
-export interface ArrowShape extends TLShape {
+export interface ArrowShape extends FSBaseShape {
   type: 'arrow'
   handles: {
     start: {

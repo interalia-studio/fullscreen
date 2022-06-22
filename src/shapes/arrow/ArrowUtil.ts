@@ -6,6 +6,7 @@ import {
 import Vec from "@tldraw/vec";
 import { nanoid } from "nanoid";
 import { FSShapeUtil } from "~/src/shapes/FSShapeUtil";
+import { defaultStyle } from "../shared/shape-styles";
 import { ArrowComponent } from "./ArrowComponent";
 import { ArrowIndicator } from "./ArrowIndicator";
 import type { ArrowShape } from "./ArrowShape";
@@ -55,6 +56,7 @@ export class ArrowUtil extends FSShapeUtil<T, E> {
         },
       },
       childIndex: 1,
+      style: defaultStyle,
       ...props,
     };
   };

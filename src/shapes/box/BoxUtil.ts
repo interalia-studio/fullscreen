@@ -2,6 +2,7 @@ import { Utils, TLBounds } from "@tldraw/core";
 import { intersectLineSegmentBounds } from "@tldraw/intersect";
 import { nanoid } from "nanoid";
 import { FSShapeUtil } from "~/src/shapes/FSShapeUtil";
+import { defaultStyle } from "../shared/shape-styles";
 import { BoxComponent } from "./BoxComponent";
 import { BoxIndicator } from "./BoxIndicator";
 import type { BoxShape } from "./BoxShape";
@@ -46,6 +47,7 @@ export class BoxUtil extends FSShapeUtil<T, E> {
       point: [0, 0],
       size: [100, 100],
       childIndex: 1,
+      style: defaultStyle,
       ...props,
     };
   };

@@ -46,6 +46,15 @@ export const Toolbar = () => {
             <Square />
           </Highlight>
         </PrimaryToolButton>
+        <PrimaryToolButton
+          id="sticky"
+          isActive={machine.isIn("sticky")}
+          onClick={onToolSelect}
+        >
+          <Highlight>
+            <Square />
+          </Highlight>
+        </PrimaryToolButton>
       </PrimaryTools>
     </ToolbarContainer>
   );
