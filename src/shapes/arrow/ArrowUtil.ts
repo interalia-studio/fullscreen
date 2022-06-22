@@ -5,7 +5,7 @@ import {
 } from "@tldraw/intersect";
 import Vec from "@tldraw/vec";
 import { nanoid } from "nanoid";
-import { CustomShapeUtil } from "~/src/shapes/CustomShapeUtil";
+import { FSShapeUtil } from "~/src/shapes/FSShapeUtil";
 import { ArrowComponent } from "./ArrowComponent";
 import { ArrowIndicator } from "./ArrowIndicator";
 import type { ArrowShape } from "./ArrowShape";
@@ -13,7 +13,7 @@ import type { ArrowShape } from "./ArrowShape";
 type T = ArrowShape;
 type E = SVGSVGElement;
 
-export class ArrowUtil extends CustomShapeUtil<T, E> {
+export class ArrowUtil extends FSShapeUtil<T, E> {
   Component = ArrowComponent;
 
   Indicator = ArrowIndicator;

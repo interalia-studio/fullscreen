@@ -1,7 +1,7 @@
 import { Utils, TLBounds } from "@tldraw/core";
 import { intersectLineSegmentBounds } from "@tldraw/intersect";
 import { nanoid } from "nanoid";
-import { CustomShapeUtil } from "~/src/shapes/CustomShapeUtil";
+import { FSShapeUtil } from "~/src/shapes/FSShapeUtil";
 import { BoxComponent } from "./BoxComponent";
 import { BoxIndicator } from "./BoxIndicator";
 import type { BoxShape } from "./BoxShape";
@@ -9,7 +9,7 @@ import type { BoxShape } from "./BoxShape";
 type T = BoxShape;
 type E = SVGSVGElement;
 
-export class BoxUtil extends CustomShapeUtil<T, E> {
+export class BoxUtil extends FSShapeUtil<T, E> {
   Component = BoxComponent;
 
   Indicator = BoxIndicator;

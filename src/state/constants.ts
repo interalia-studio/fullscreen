@@ -130,3 +130,6 @@ export type AppData = typeof INITIAL_DATA;
 export type Action = S.Action<AppData>;
 
 export type Condition = S.Condition<AppData>;
+
+export const GHOSTED_OPACITY = 0.3
+export const LINE_HEIGHT = 1

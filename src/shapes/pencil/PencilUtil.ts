@@ -5,7 +5,7 @@ import {
   intersectLineSegmentPolyline,
 } from "@tldraw/intersect";
 import { nanoid } from "nanoid";
-import { CustomShapeUtil } from "~/src/shapes/CustomShapeUtil";
+import { FSShapeUtil } from "~/src/shapes/FSShapeUtil";
 import { PencilComponent } from "./PencilComponent";
 import { PencilIndicator } from "./PenclIndicator";
 import type { PencilShape } from "./PencilShape";
@@ -14,7 +14,7 @@ import Vec from "@tldraw/vec";
 type T = PencilShape;
 type E = SVGSVGElement;
 
-export class PencilUtil extends CustomShapeUtil<T, E> {
+export class PencilUtil extends FSShapeUtil<T, E> {
   Component = PencilComponent;
 
   Indicator = PencilIndicator;

@@ -1,7 +1,12 @@
 import { TLBounds, TLShape, TLShapeUtil } from '@tldraw/core'
+import { ShapeStyles } from './shared/shape-styles'
 
-export abstract class CustomShapeUtil<
-  T extends TLShape,
+export interface FSBaseShape extends TLShape {
+  style: ShapeStyles
+}
+
+export abstract class FSShapeUtil<
+  T extends FSBaseShape,
   E extends Element = Element
 > extends TLShapeUtil<T, E> {
   /* ----------------- Custom Methods ----------------- */
