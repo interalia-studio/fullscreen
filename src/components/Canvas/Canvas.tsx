@@ -1,14 +1,11 @@
 import { Tldraw, TldrawApp } from "@tldraw/tldraw";
 import { appWindow } from "@tauri-apps/api/window";
 import React, { useEffect, useCallback, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { v4 as uuid } from "uuid";
+import { useNavigate } from "react-router-dom";
 
 import { useYjsSession } from "../../adapters/yjs";
 import fileSystem from "../../lib/fileSystem";
 import { isNativeApp } from "../../lib/tauri";
-import store from "../../adapters/yjs/store";
-import { FSAdapter } from "../../types";
 import { Toolbar } from "../../components/Toolbar";
 import { AppContext } from "../../components/Canvas";
 
@@ -77,7 +74,7 @@ export const Canvas = ({ boardId }: { boardId: string }) => {
       />
       {tldrawApp && (
         <AppContext.Provider value={tldrawApp}>
-          <Toolbar tldraw={tldrawApp} />
+          <Toolbar />
         </AppContext.Provider>
       )}
     </main>
