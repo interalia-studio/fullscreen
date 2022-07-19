@@ -1,85 +1,17 @@
-import { Tldraw, TldrawApp } from "@tldraw/tldraw";
-import { appWindow } from "@tauri-apps/api/window";
-import React, { useEffect, useCallback, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { v4 as uuid } from "uuid";
+import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-import { useYjsSession } from "../adapters/yjs";
-import fileSystem from "../lib/fileSystem";
-import { isNativeApp } from "../lib/tauri";
-import store from "../adapters/yjs/store";
-import { FSAdapter } from "../types";
-import { Toolbar } from "../components/Toolbar";
+import { Canvas } from "../components/Canvas";
 
 const Board = () => {
   const { boardId } = useParams();
   let navigate = useNavigate();
 
-  const [tldrawApp, setTLDrawApp] = useState<TldrawApp>();
-  const handleMount = useCallback(
-    (tldraw: TldrawApp) => {
-      tldraw.loadRoom(boardId);
-      tldraw.pause();
-      setTLDrawApp(tldraw);
-    },
-    [boardId]
-  );
-
-  const session = useYjsSession(tldrawApp, boardId);
-
-  const handleNewProject = () => {
-    const newBoardId = session.createDocument();
-    navigate(`/board/${newBoardId}`);
-  };
-
-  const handleOpenProject = async () => {
-    const fileContents = await fileSystem.openFile();
-    const newBoardId = session.loadDocument(fileContents);
-    navigate(`/board/${newBoardId}`);
-  };
-
-  const handleSaveProject = async () => {
-    const fileContents = session.serialiseDocument();
-    await fileSystem.saveFile(fileContents);
-  };
-
-  /**
-   * Setup Tauri event handlers on mount
-   */
-  useEffect(() => {
-    if (isNativeApp()) {
-      appWindow.listen("tauri://menu", ({ windowLabel, payload }) => {
-        switch (payload) {
-          case "open":
-            handleOpenProject();
-            break;
-          case "save":
-            handleSaveProject();
-        }
-      });
-    }
-  }, []);
+  if (boardId == null || boardId.length == 0) navigate("/");
 
   return (
     <main>
-      <Tldraw
-        disableAssets
-        showPages={false}
-        showMultiplayerMenu={false}
-        readOnly={session?.isLoading}
-        onMount={handleMount}
-        onNewProject={handleNewProject}
-        onOpenProject={handleOpenProject}
-        onSaveProject={handleSaveProject}
-        showMenu={!isNativeApp()}
-        showTools={false}
-        {...session?.eventHandlers}
-      />
-      {tldrawApp && (
-        <div>
-          <Toolbar tldraw={tldrawApp} />
-        </div>
-      )}
+      <Canvas boardId={boardId as string} />
     </main>
   );
 };
