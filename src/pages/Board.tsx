@@ -8,22 +8,24 @@ import { useYjsSession } from "../adapters/yjs";
 import fileSystem from "../lib/fileSystem";
 import { isNativeApp } from "../lib/tauri";
 import store from "../adapters/yjs/store";
+import { FSAdapter } from "../types";
+import { Toolbar } from "../components/Toolbar";
 
 const Board = () => {
   const { boardId } = useParams();
   let navigate = useNavigate();
 
-  const [app, setApp] = useState<TldrawApp>();
+  const [tldrawApp, setTLDrawApp] = useState<TldrawApp>();
   const handleMount = useCallback(
-    (app: TldrawApp) => {
-      app.loadRoom(boardId);
-      app.pause();
-      setApp(app);
+    (tldraw: TldrawApp) => {
+      tldraw.loadRoom(boardId);
+      tldraw.pause();
+      setTLDrawApp(tldraw);
     },
     [boardId]
   );
 
-  const session = useYjsSession(app, boardId);
+  const session = useYjsSession(tldrawApp, boardId);
 
   const handleNewProject = () => {
     const newBoardId = session.createDocument();
@@ -70,8 +72,14 @@ const Board = () => {
         onOpenProject={handleOpenProject}
         onSaveProject={handleSaveProject}
         showMenu={!isNativeApp()}
+        showTools={false}
         {...session?.eventHandlers}
       />
+      {tldrawApp && (
+        <div>
+          <Toolbar tldraw={tldrawApp} />
+        </div>
+      )}
     </main>
   );
 };
