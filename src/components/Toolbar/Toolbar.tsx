@@ -4,6 +4,7 @@ import { MousePointer, Square, X } from "react-feather";
 
 import styled from "../../stitches.config";
 import { ToolButton } from "./ToolButton";
+import StickyNote from "./assets/sticky-note.svg";
 
 export const Toolbar = () => {
   return (
@@ -13,7 +14,7 @@ export const Toolbar = () => {
           <MousePointer />
         </ToolButton>
         <ToolButton toolType={TDShapeType.Sticky}>
-          <Square />
+          <StickyNote />
         </ToolButton>
         <ToolButton toolType="erase">
           <X />
@@ -29,7 +30,7 @@ const ToolbarContainer = styled("div", {
   gridTemplateRows: "auto auto",
   gridRowGap: "$5",
   position: "fixed",
-  left: "0",
+  left: "5px",
   height: "100%",
   zIndex: "101",
 });
