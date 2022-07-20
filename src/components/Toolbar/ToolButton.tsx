@@ -36,6 +36,11 @@ const Highlight = styled("div", {
   padding: 10,
   borderRadius: "100%",
   transition: "background-color .025s",
+  // This makes webkit not glitch out the svg
+  "& svg": {
+    width: "100%",
+    height: "100%",
+  },
 });
 
 const PrimaryToolButton = styled("button", {
@@ -52,20 +57,23 @@ const PrimaryToolButton = styled("button", {
   variants: {
     isActive: {
       true: {
+        // Inverted colors when active
         color: "$background",
         [`& > ${Highlight}`]: {
           backgroundColor: "$text",
         },
       },
       false: {
+        // Light shadow on hover
         [`&:hover > ${Highlight}`]: {
           backgroundColor: "$hover",
         },
+        // Same style as in active state while pressed
         "&:active": {
           color: "$background",
-        },
-        [`&:active > ${Highlight}`]: {
-          backgroundColor: "$text",
+          [`& > ${Highlight}`]: {
+            backgroundColor: "$text",
+          },
         },
       },
     },
