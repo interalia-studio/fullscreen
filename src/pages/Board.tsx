@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { Canvas } from "../components/Canvas";
 
-const Board = () => {
+export const Board = () => {
   const { boardId } = useParams();
   let navigate = useNavigate();
 
@@ -15,5 +15,3 @@ const Board = () => {
     </main>
   );
 };
-
-export default Board;

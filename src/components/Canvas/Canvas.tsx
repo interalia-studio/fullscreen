@@ -58,7 +58,7 @@ export const Canvas = ({ boardId }: { boardId: string }) => {
   }, []);
 
   return (
-    <main>
+    <div className="tldraw">
       <Tldraw
         disableAssets
         showPages={false}
@@ -77,6 +77,6 @@ export const Canvas = ({ boardId }: { boardId: string }) => {
           <Toolbar />
         </AppContext.Provider>
       )}
-    </main>
+    </div>
   );
 };

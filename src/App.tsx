@@ -1,18 +1,21 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import Home from "./pages/Home";
-import Board from "./pages/Board";
+import { Home } from "./pages/Home";
+import { Board } from "./pages/Board";
+import { globalStyles } from "./globalStyles";
 
-const App = () => (
-  <main>
+const App = () => {
+  globalStyles();
+
+  return (
     <Router>
       <Routes>
         <Route path="/board/:boardId" element={<Board />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </Router>
-  </main>
-);
+  );
+};
 
 export default App;

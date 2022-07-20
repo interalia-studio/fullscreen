@@ -1,10 +1,10 @@
 import { TDShapeType, TDToolType, TldrawApp } from "@tldraw/tldraw";
 import React from "react";
-import { MousePointer, Square, X } from "react-feather";
+import { MousePointer, X } from "react-feather";
 
 import styled from "../../stitches.config";
 import { ToolButton } from "./ToolButton";
-import StickyNote from "./assets/sticky-note.svg";
+import StickyNote from "../../assets/icons/sticky.svg";
 
 export const Toolbar = () => {
   return (

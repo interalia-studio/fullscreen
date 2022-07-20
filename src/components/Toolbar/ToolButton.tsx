@@ -37,7 +37,7 @@ const Highlight = styled("div", {
   borderRadius: "100%",
   transition: "background-color .025s",
   // This makes webkit not glitch out the svg
-  "& svg": {
+  "& > svg": {
     width: "100%",
     height: "100%",
   },
