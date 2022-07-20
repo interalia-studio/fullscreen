@@ -45,5 +45,5 @@ const PrimaryTools = styled("div", {
   overflow: "hidden",
   padding: "$2",
   justifySelf: "center",
-  backgroundColor: "$background",
+  backgroundColor: "white",
 });
