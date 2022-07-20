@@ -28,7 +28,7 @@ jobs:
     - name: Setup node
       uses: actions/setup-node@v1
       with:
-        node-version: 16
+        node-version: 18
 
     - name: Install Rust toolchain
       uses: actions-rs/toolchain@v1
@@ -40,7 +40,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{ env.cache_path }}
-        key: ${{ runner.os }}-publish-${{ hashFiles('**/Cargo.lock') }}
+        key: ${{ runner.os }}-publish-${{ hashFiles('**/Cargo.lock') }}-${{ hashFiles('**/package-lock.json') }}
 
     - name: Install dependencies (Ubuntu only)
       if: matrix.platform == 'ubuntu-latest'
