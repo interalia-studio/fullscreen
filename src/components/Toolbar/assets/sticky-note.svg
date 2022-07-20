@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg class="fs-icon-sticky-note"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 55.39 58.62">
+    <path 
+        d="M2.81,6.72L39.46,3.14s.42,32.25,11.43,34.04-27.84,11.56-32.51,12.36c-.36,.06-.72,.05-1.06-.05-2.82-.79-14.65-6.29-14.51-42.77Z" 
+        fill="none" 
+        stroke="currentColor" 
+        stroke-linecap="square" 
+        stroke-linejoin="round" 
+        stroke-width="5"/>
+</svg>
