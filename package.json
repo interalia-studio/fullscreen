@@ -1,6 +1,6 @@
 {
   "name": "fullscreen",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "description": "The https://fullscreen.space website",
   "private": true,
   "source": "src/index.html",
