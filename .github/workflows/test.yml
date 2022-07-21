@@ -1,13 +1,9 @@
 name: "test"
 
-on: [pull_request]
+on: push
 
 env:
   CARGO_TERM_COLOR: always
-  cache_path: |
-    node_modules
-    src-tauri/target
-    ~/.cargo
   cargo_manifest: src-tauri/Cargo.toml
 
 jobs:
@@ -23,9 +19,9 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Setup node
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
-        node-version: 18
+        node-version-file: '.nvmrc'
 
     - name: Install Rust toolchain
       uses: actions-rs/toolchain@v1
@@ -33,20 +29,39 @@ jobs:
         profile: minimal
         toolchain: stable
 
-    - name: Restore from cache
+    - name: Get npm cache directory
+      id: npm-cache-dir
+      run: |
+        echo "::set-output name=dir::$(npm config get cache)"
+
+    - name: Restore from Node.js cache
+      id: cache-node
+      uses: actions/cache@v3
+      with:
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Restore from Cargo cache
+      id: cache-cargo
       uses: actions/cache@v2
       with:
-        path: ${{ env.cache_path }}
-        key: ${{ runner.os }}-publish-${{ hashFiles('**/Cargo.lock') }}-${{ hashFiles('**/package-lock.json') }}
+        path: |
+          ~/.cargo/bin/
+          ~/.cargo/registry/index/
+          ~/.cargo/registry/cache/
+          ~/.cargo/git/db/
+        key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
-    - name: Install dependencies (Ubuntu only)
-      if: matrix.platform == 'ubuntu-latest'
+    - name: Install Tauri dependencies (Ubuntu only)
+      if: matrix.platform == 'ubuntu-latest' && steps.cache-cargo.outputs.cache-hit != 'true'
       run: |
         sudo apt-get update
         sudo apt-get install -y libgtk-3-dev webkit2gtk-4.0 libappindicator3-dev librsvg2-dev patchelf
 
     - name: Install js dependencies
-      run: npm install
+      run: npm ci
       
     - name: Build app
       run: npm run build
