@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed redirect to correct document URL in file load [#32](https://github.com/interalia-studio/fullscreen/pull/32)
 - Refuse loading document without a board id [#37](https://github.com/interalia-studio/fullscreen/pull/37)
 - Throttle presence updates [#35](https://github.com/interalia-studio/fullscreen/pull/35)
+- Fix CI cache [#60](https://github.com/interalia-studio/fullscreen/pull/60)
 
 ### Bits and bobs
 
