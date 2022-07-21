@@ -38,7 +38,6 @@ jobs:
         echo "::set-output name=dir::$(npm config get cache)"
 
     - name: Restore from Node.js cache
-      id: cache-node
       uses: actions/cache@v3
       with:
         path: ${{ steps.npm-cache-dir.outputs.dir }}
@@ -47,7 +46,6 @@ jobs:
           ${{ runner.os }}-node-
 
     - name: Restore from Cargo cache
-      id: cache-cargo
       uses: actions/cache@v2
       with:
         path: |
@@ -59,7 +57,7 @@ jobs:
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
     - name: Install Tauri dependencies (Ubuntu only)
-      if: matrix.platform == 'ubuntu-latest' && steps.cache-cargo.outputs.cache-hit != 'true'
+      if: matrix.platform == 'ubuntu-latest'
       run: |
         sudo apt-get update
         sudo apt-get install -y libgtk-3-dev webkit2gtk-4.0 libappindicator3-dev librsvg2-dev patchelf
