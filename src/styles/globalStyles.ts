@@ -3,8 +3,8 @@ import { normalize } from "stitches-normalize-css";
 
 import { globalCss } from "./stitches.config";
 
-import urbanistWoff from "url:./assets/fonts/urbanist-v8-latin-regular.woff";
-import urbanistWoff2 from "url:./assets/fonts/urbanist-v8-latin-regular.woff2";
+import urbanistWoff from "url:../assets/fonts/urbanist-v8-latin-regular.woff";
+import urbanistWoff2 from "url:../assets/fonts/urbanist-v8-latin-regular.woff2";
 
 const styles: Record<string, CSS> = {
   "*": {

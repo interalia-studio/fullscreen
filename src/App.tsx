@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { Home } from "./pages/Home";
 import { Board } from "./pages/Board";
-import { globalStyles } from "./globalStyles";
+import { globalStyles } from "./styles";
 
 const App = () => {
   globalStyles();
