@@ -1,6 +1,6 @@
 import { createStitches, defaultThemeMap } from "@stitches/react";
 
-export const { styled } = createStitches({
+export const { styled, globalCss } = createStitches({
   themeMap: {
     ...defaultThemeMap,
   },
@@ -31,9 +31,7 @@ export const { styled } = createStitches({
       4: "18px",
     },
     fonts: {
-      ui: '"Urbanist", system-ui, sans-serif',
-      body: '"Urbanist", system-ui, sans-serif',
-      mono: '"Roboto Mono", monospace',
+      text: '"Urbanist", system-ui, sans-serif',
     },
     fontWeights: {
       0: "400",

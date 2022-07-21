@@ -40,7 +40,7 @@ const Heading = styled("h1", {
   marginBottom: "3em",
   maxWidth: "15em",
   textAlign: "center",
-  fontFamily: "$body",
+  fontFamily: "$text",
   fontSize: "3em",
   color: "$blue",
   wordBreak: "keep-all",
@@ -49,7 +49,7 @@ const Heading = styled("h1", {
   },
 });
 
-const Logos = styled("div", {
+const Logos = styled("section", {
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
