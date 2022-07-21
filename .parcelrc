@@ -1,10 +1,8 @@
 {
   extends: "@parcel/config-default",
+  
+  // Inline SVG files as React components
   transformers: {
-    "*.svg": [
-      // The next line includes Parcel's defaults for the svg pipeline.
-      "...",
-      "@parcel/transformer-svg-react",
-    ],
+    "*.svg": ["...", "@parcel/transformer-svg-react"],
   },
 }
