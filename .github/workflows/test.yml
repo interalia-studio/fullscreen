@@ -1,6 +1,9 @@
 name: "test"
 
-on: push
+on:
+  push:
+    branches: [ main ]
+  pull_request:
 
 env:
   CARGO_TERM_COLOR: always
@@ -52,6 +55,7 @@ jobs:
           ~/.cargo/registry/index/
           ~/.cargo/registry/cache/
           ~/.cargo/git/db/
+          target
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
     - name: Install Tauri dependencies (Ubuntu only)
