@@ -1,6 +1,13 @@
-import { TDShapeType, TDToolType, TldrawApp } from "@tldraw/tldraw";
+import { TDShapeType } from "@tldraw/tldraw";
 import React from "react";
-import { MousePointer, X } from "react-feather";
+import {
+  ArrowUpRight,
+  MousePointer,
+  Square,
+  Type,
+  X,
+  Edit2,
+} from "react-feather";
 
 import { styled } from "../../styles";
 import { ToolButton } from "./ToolButton";
@@ -16,6 +23,18 @@ export const Toolbar = () => {
         </ToolButton>
         <ToolButton toolType={TDShapeType.Sticky}>
           <StickyNote />
+        </ToolButton>
+        <ToolButton toolType={TDShapeType.Arrow}>
+          <ArrowUpRight />
+        </ToolButton>
+        <ToolButton toolType={TDShapeType.Rectangle}>
+          <Square />
+        </ToolButton>
+        <ToolButton toolType={TDShapeType.Text}>
+          <Type />
+        </ToolButton>
+        <ToolButton toolType={TDShapeType.Draw}>
+          <Edit2 />
         </ToolButton>
         <ToolButton toolType="erase">
           <X />
