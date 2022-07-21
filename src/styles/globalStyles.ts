@@ -1,7 +1,7 @@
 import type { CSS } from "@stitches/react";
 import { normalize } from "stitches-normalize-css";
 
-import { globalCss } from "./stitches.config";
+import { globalCss } from "./stitchesConfig";
 
 import urbanistWoff from "url:../assets/fonts/urbanist-v8-latin-regular.woff";
 import urbanistWoff2 from "url:../assets/fonts/urbanist-v8-latin-regular.woff2";
