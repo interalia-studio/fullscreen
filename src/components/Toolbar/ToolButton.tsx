@@ -1,6 +1,7 @@
 import { TDToolType, TldrawApp } from "@tldraw/tldraw";
 import React from "react";
-import styled from "../../stitches.config";
+
+import { styled } from "../../styles";
 import { AppContext } from "../Canvas";
 
 export const ToolButton = ({
