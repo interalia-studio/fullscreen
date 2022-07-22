@@ -67,7 +67,7 @@ const Heading = styled("h1", {
   },
 });
 
-const Heading = styled("h2", {
+const Feature = styled("h2", {
   marginBottom: "3em",
   maxWidth: "15em",
   textAlign: "center",
