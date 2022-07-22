@@ -1,8 +1,8 @@
 import { TDToolType, TldrawApp } from "@tldraw/tldraw";
 import React from "react";
 
-import { styled } from "../../styles";
-import { AppContext } from "../Canvas";
+import { styled } from "~/styles";
+import { AppContext } from "~/components/Canvas";
 
 export const ToolButton = ({
   toolType,

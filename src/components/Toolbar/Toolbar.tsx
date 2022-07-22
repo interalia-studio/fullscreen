@@ -9,7 +9,7 @@ import {
   Edit2,
 } from "react-feather";
 
-import { styled } from "../../styles";
+import { styled } from "~/styles";
 import { ToolButton } from "./ToolButton";
 
 import StickyNote from "../../assets/icons/sticky.svg";

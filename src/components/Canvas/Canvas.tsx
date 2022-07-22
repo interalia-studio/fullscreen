@@ -3,11 +3,11 @@ import { appWindow } from "@tauri-apps/api/window";
 import React, { useEffect, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useYjsSession } from "../../adapters/yjs";
-import fileSystem from "../../lib/fileSystem";
-import { isNativeApp } from "../../lib/tauri";
-import { Toolbar } from "../../components/Toolbar";
-import { AppContext } from "../../components/Canvas";
+import { useYjsSession } from "~/adapters/yjs";
+import fileSystem from "~/lib/fileSystem";
+import { isNativeApp } from "~/lib/tauri";
+import { Toolbar } from "~/components/Toolbar";
+import { AppContext } from "~/components/Canvas";
 
 export const Canvas = ({ boardId }: { boardId: string }) => {
   let navigate = useNavigate();
