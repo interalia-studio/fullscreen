@@ -7,7 +7,7 @@ import * as Y from "yjs";
 import { FileProvider } from "./fileProvider";
 import Presence from "./presence";
 import store from "./store";
-import { FSAdapter } from "../../types";
+import { FSAdapter } from "~/types";
 
 /**
  * A `YjsSession` uses a Websocket connection to a relay server to sync document

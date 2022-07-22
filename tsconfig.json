@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "ESNext",
+    "lib": ["DOM", "ESNext"],
+    "jsx": "react-jsx",
+
+    /* Modules */
+    "module": "commonjs",
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "paths": {
+      "~/*": ["./*"]
+    },
+    "preserveSymlinks": true,
+
+    /* Emit */
+    "sourceMap": true,
+
+    /* Interop Constraints */
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Type Checking */
+    "strict": true,
+
+    /* Completeness */
+    "skipLibCheck": true
+  },
+  "include": ["types/**/*.d.ts", "src/**/*"],
+  "exclude": ["node_modules"]
+}

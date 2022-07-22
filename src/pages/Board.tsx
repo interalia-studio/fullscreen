@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { Canvas } from "../components/Canvas";
+import { Canvas } from "~/components/Canvas";
 
 export const Board = () => {
   const { boardId } = useParams();

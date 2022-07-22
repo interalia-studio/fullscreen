@@ -1,8 +1,18 @@
 {
   extends: "@parcel/config-default",
-  
-  // Inline SVG files as React components
+
+  resolvers: [
+    "...",
+
+    // Recognize path config in tsconfig
+    "parcel-resolver-tspaths",
+  ],
+
   transformers: {
+    // Inline SVG files as React components
     "*.svg": ["...", "@parcel/transformer-svg-react"],
+
+    // Use tsc instead of Parcel's ts config, which doesn't support some custom tsconfig options.
+    "*.{ts,tsx}": ["@parcel/transformer-typescript-tsc"],
   },
 }
