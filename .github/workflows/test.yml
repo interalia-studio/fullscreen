@@ -74,3 +74,17 @@ jobs:
         configPath: "src-tauri/tauri.conf.json"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  types:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup node
+      uses: actions/setup-node@v3
+      with:
+        node-version-file: '.nvmrc'
+
+    - name: Run Typescript compiler
+      run: npm run check
+
