@@ -37,7 +37,7 @@ jobs:
       run: |
         echo "::set-output name=dir::$(npm config get cache)"
 
-    - name: Restore from Node.js cache
+    - name: Restore from Node cache
       uses: actions/cache@v3
       with:
         path: ${{ steps.npm-cache-dir.outputs.dir }}
@@ -80,7 +80,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Setup node
+    - name: Setup Node
       uses: actions/setup-node@v3
       with:
         node-version-file: '.nvmrc'
@@ -90,7 +90,7 @@ jobs:
       run: |
         echo "::set-output name=dir::$(npm config get cache)"
 
-    - name: Restore from Node.js cache
+    - name: Restore from Node cache
       uses: actions/cache@v3
       with:
         path: ${{ steps.npm-cache-dir.outputs.dir }}
