@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use stitches for CSS-in-JS [#56](https://github.com/interalia-studio/fullscreen/pull/56)
 - Added self-hosted Urbanist web font [#59](https://github.com/interalia-studio/fullscreen/pull/59)
 - Added more tools to the new toolbar [#61](https://github.com/interalia-studio/fullscreen/pull/61)
+- Added Typescript config [#64](https://github.com/interalia-studio/fullscreen/pull/64)
 
 ### Fixed
 
