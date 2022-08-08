@@ -3,7 +3,7 @@ import { Room } from "@y-presence/client";
 import { WebsocketProvider } from "y-websocket";
 
 import { throttle } from "lodash";
-import { TldrawPresence } from "../../types";
+import { TldrawPresence } from "~/types";
 
 // Limit the frequency of presence updates so delays don't add up
 // and participant cursors get out of sync.

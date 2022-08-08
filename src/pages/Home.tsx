@@ -2,8 +2,8 @@ import React, { useMemo } from "react";
 import { v4 as uuid } from "uuid";
 import { Navigate } from "react-router-dom";
 
-import { styled } from "../styles";
-import { isNativeApp } from "../lib/tauri";
+import { styled } from "~/styles";
+import { isNativeApp } from "~/lib/tauri";
 
 import HeroImage from "../assets/images/visual_play.png";
 

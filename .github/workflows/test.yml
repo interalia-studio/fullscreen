@@ -11,12 +11,8 @@ env:
 
 jobs:
   tauri:
-    strategy:
-      fail-fast: false
-      matrix:
-        platform: [macos-latest, ubuntu-latest, windows-latest]
-
-    runs-on: ${{ matrix.platform }}
+    runs-on: macos-latest
+    
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -37,7 +33,7 @@ jobs:
       run: |
         echo "::set-output name=dir::$(npm config get cache)"
 
-    - name: Restore from Node.js cache
+    - name: Restore from Node cache
       uses: actions/cache@v3
       with:
         path: ${{ steps.npm-cache-dir.outputs.dir }}
@@ -74,3 +70,33 @@ jobs:
         configPath: "src-tauri/tauri.conf.json"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  types:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version-file: '.nvmrc'
+
+    - name: Get npm cache directory
+      id: npm-cache-dir
+      run: |
+        echo "::set-output name=dir::$(npm config get cache)"
+
+    - name: Restore from Node cache
+      uses: actions/cache@v3
+      with:
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install js dependencies
+      run: npm ci
+
+    - name: Run Typescript compiler
+      run: npm run check
+
