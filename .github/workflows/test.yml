@@ -11,12 +11,8 @@ env:
 
 jobs:
   tauri:
-    strategy:
-      fail-fast: false
-      matrix:
-        platform: [macos-latest, ubuntu-latest, windows-latest]
-
-    runs-on: ${{ matrix.platform }}
+    runs-on: macos-latest
+    
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
