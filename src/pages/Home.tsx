@@ -5,8 +5,6 @@ import { Navigate } from "react-router-dom";
 import { styled } from "~/styles";
 import { isNativeApp } from "~/lib/tauri";
 
-import HeroImage from "../assets/images/visual_play.png";
-
 import LogoBMBF from "../assets/images/logo-bmbf.svg";
 import LogoOKFN from "../assets/images/logo-okfn.svg";
 
@@ -20,7 +18,10 @@ export const Home = () => {
     <HomeContainer>
       <Heading>Fullscreen</Heading>
       <Subheading>&mdash;truly, yours</Subheading>
-      <HeroImage alt="Fullscreen is a visual canvas app" />
+      <img
+        src={require("~/assets/images/visual_play.png")}
+        alt="Fullscreen is a visual canvas app"
+      />
       <Features>
         <div>
           <h2>No cloud required</h2>
