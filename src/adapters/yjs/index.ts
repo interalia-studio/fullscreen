@@ -7,7 +7,7 @@ import * as Y from "yjs";
 import { FileProvider } from "./fileProvider";
 import Presence from "./presence";
 import store from "./store";
-import { FSAdapter } from "~/types";
+import { BoardId, FSAdapter } from "~/types";
 
 /**
  * A `YjsSession` uses a Websocket connection to a relay server to sync document
@@ -15,7 +15,11 @@ import { FSAdapter } from "~/types";
  *
  * It can serialise and deserialise to a binary format.
  */
-export const useYjsSession = (app: TldrawApp, boardId: string): FSAdapter => {
+export const useYjsSession = (
+  app: TldrawApp,
+  passive: boolean,
+  boardId: BoardId
+): FSAdapter => {
   // This is false until the page state has been loaded from yjs
   const [isLoading, setLoading] = useState(true);
 
@@ -134,10 +138,23 @@ export const useYjsSession = (app: TldrawApp, boardId: string): FSAdapter => {
     replacePageWithDocState();
     setLoading(false);
     const boardId = store.board.get("id");
+    // TODO: Remove this once yjs.fullscreen.space doesn't contain documents without `boardId`.
     if (boardId == null) {
       alert("Outdated document doesn't contain a board id");
       return createDocument();
     }
+    return boardId;
+  };
+
+  /**
+   * Create a copy of a board that can be edited independently.
+   *
+   * @param boardId the original boardId
+   * @returns the newly created boardId
+   */
+  const createDuplicate = async (boardId: BoardId): Promise<BoardId> => {
+    // TODO
+    console.log("createDuplicate not yet implemented");
     return boardId;
   };
 
@@ -150,6 +167,7 @@ export const useYjsSession = (app: TldrawApp, boardId: string): FSAdapter => {
     isLoading,
     createDocument,
     loadDocument,
+    createDuplicate,
     serialiseDocument,
     eventHandlers: {
       onChangePage: handleChangePage,
@@ -164,7 +182,7 @@ export const useYjsSession = (app: TldrawApp, boardId: string): FSAdapter => {
 
       onChangePresence: useCallback(
         (app: TldrawApp, user: TDUser) =>
-          app && room && room.update(app.room.userId, user),
+          app && !passive && room && room.update(app.room.userId, user),
         [room]
       ),
     },

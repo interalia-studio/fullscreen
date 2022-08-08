@@ -12,6 +12,7 @@ const styles: Record<string, CSS> = {
   "html, body": {
     margin: 0,
     padding: 0,
+    fontFamily: "$text",
   },
 };
 

@@ -11,10 +11,13 @@ export interface FSBoard {
   bindings: string[];
 }
 
+export type BoardId = string;
+
 export interface FSAdapter {
   isLoading: boolean;
   createDocument: () => string;
   loadDocument: (input: Uint8Array) => void;
   serialiseDocument: () => Uint8Array;
   eventHandlers: TldrawProps;
+  createDuplicate: (boardId: BoardId) => Promise<BoardId>;
 }
