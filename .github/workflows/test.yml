@@ -85,6 +85,22 @@ jobs:
       with:
         node-version-file: '.nvmrc'
 
+    - name: Get npm cache directory
+      id: npm-cache-dir
+      run: |
+        echo "::set-output name=dir::$(npm config get cache)"
+
+    - name: Restore from Node.js cache
+      uses: actions/cache@v3
+      with:
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install js dependencies
+      run: npm ci
+
     - name: Run Typescript compiler
       run: npm run check
 
