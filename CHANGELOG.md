@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Removed experimental Windows and Linux builds [#65](https://github.com/interalia-studio/fullscreen/pull/65)
+- Refactor integration of Y.js and TLDraw to separate concerns [#67](https://github.com/interalia-studio/fullscreen/pull/67)
 
 ### Fixed
 
