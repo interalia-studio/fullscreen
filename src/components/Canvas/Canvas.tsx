@@ -1,81 +1,55 @@
-import { Tldraw, TldrawApp } from "@tldraw/tldraw";
-import { appWindow } from "@tauri-apps/api/window";
-import React, { useEffect, useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { TDUser, Tldraw, TldrawApp } from "@tldraw/tldraw";
+import React, { useEffect, useCallback, useState, useContext } from "react";
+import debug from "debug";
 
-import { useYjsSession } from "~/lib/adapters/yjs";
-import fileSystem from "~/lib/fileSystem";
 import { isNativeApp } from "~/lib/tauri";
-import { Toolbar } from "~/components/Toolbar";
 import { AppContext } from "~/components/Canvas";
-import { JoinBoard } from "../JoinBoard";
+import { StoreContext } from "../Store";
 
-export const Canvas = ({ boardId }: { boardId: string }) => {
-  let navigate = useNavigate();
+const log = debug("fs:canvas");
+
+/**
+ * Mounts a TLDraw canvas and provides a `TldrawContext`
+ */
+export const Canvas: React.FC<{
+  children: React.ReactNode;
+}> = (props) => {
+  let store = useContext(StoreContext);
 
   const [tldrawApp, setTLDrawApp] = useState<TldrawApp>();
 
-  // True when user has given consent to broadcast their changes and presence.
-  const [collaborationConsent, setCollaborationConsent] = useState<boolean>(
-    isNativeApp()
-  );
-
   const handleMount = useCallback(
     (tldraw: TldrawApp) => {
-      tldraw.loadRoom(boardId);
+      tldraw.loadRoom(store.boardId);
       tldraw.pause();
       setTLDrawApp(tldraw);
+      (window as unknown as any).app = tldraw;
     },
-    [boardId]
+    [store.boardId]
   );
 
-  const session = useYjsSession(tldrawApp, !collaborationConsent, boardId);
-
-  const handleNewProject = () => {
-    const newBoardId = session.createDocument();
-    navigate(`/board/${newBoardId}`);
-  };
-
-  const handleOpenProject = async () => {
-    const fileContents = await fileSystem.openFile();
-    const newBoardId = session.loadDocument(fileContents);
-    navigate(`/board/${newBoardId}`);
-  };
-
-  const handleSaveProject = async () => {
-    const fileContents = session.serialiseDocument();
-    await fileSystem.saveFile(fileContents);
-  };
-
-  /**
-   * Setup Tauri event handlers on mount
-   */
   useEffect(() => {
-    if (isNativeApp()) {
-      appWindow.listen("tauri://menu", ({ windowLabel, payload }) => {
-        switch (payload) {
-          case "open":
-            handleOpenProject();
-            break;
-          case "save":
-            handleSaveProject();
-        }
-      });
+    if (tldrawApp && store.presence) {
+      store.presence.connect(tldrawApp);
     }
-  }, []);
+  }, [tldrawApp, store.presence]);
 
-  const openDuplicate = async () => {
-    const newBoardId = session.createDuplicate(boardId);
-    navigate(`/board/${newBoardId}`);
-  };
+  useEffect(() => {
+    if (tldrawApp && store.contents.shapes && store.contents.bindings) {
+      tldrawApp.replacePageContent(
+        store.contents.shapes,
+        store.contents.bindings,
+        {}
+      );
+    }
+  }, [tldrawApp, store.contents, store.boardId]);
 
-  // Show the join dialogue once the session is loaded, if current user is not the board
-  // author and has not already given consent to join.
-  const displayJoinDialogue =
-    !session.isLoading &&
-    session.board?.createdBy != null &&
-    session.board.createdBy !== session.user.id &&
-    !collaborationConsent;
+  const handlePresenceChange = useCallback(
+    (_app: TldrawApp, user: TDUser) => {
+      store.updatePresence(user);
+    },
+    [store]
+  );
 
   return (
     <div className="tldraw">
@@ -83,26 +57,20 @@ export const Canvas = ({ boardId }: { boardId: string }) => {
         disableAssets
         showPages={false}
         showMultiplayerMenu={false}
-        readOnly={session?.isLoading || !collaborationConsent}
+        readOnly={false}
         onMount={handleMount}
-        onNewProject={handleNewProject}
-        onOpenProject={handleOpenProject}
-        onSaveProject={handleSaveProject}
+        onNewProject={store.handleNewProject}
+        onOpenProject={store.handleOpenProject}
+        onSaveProject={store.handleSaveProject}
         showMenu={!isNativeApp()}
         // Disable TLDraw's own toolbar.
         showTools={false}
-        {...session?.eventHandlers}
+        onChangePresence={handlePresenceChange}
+        {...store?.eventHandlers}
       />
       {tldrawApp && (
         <AppContext.Provider value={tldrawApp}>
-          <Toolbar />
-
-          {displayJoinDialogue && (
-            <JoinBoard
-              onJoin={() => setCollaborationConsent(true)}
-              onCopyBoard={openDuplicate}
-            />
-          )}
+          {props.children}
         </AppContext.Provider>
       )}
     </div>

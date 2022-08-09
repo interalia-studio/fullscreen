@@ -29,6 +29,7 @@
     "@tauri-apps/api": "^1.0.2",
     "@tldraw/tldraw": "^1.19.1",
     "@y-presence/client": "^2.0.0",
+    "debug": "^4.3.4",
     "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

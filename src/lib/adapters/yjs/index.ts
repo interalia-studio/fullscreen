@@ -1,1 +1,1 @@
-export { useYjsSession } from "./hook";
+export { useYjsAdapter } from "./hook";

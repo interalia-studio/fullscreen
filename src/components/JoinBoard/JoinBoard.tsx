@@ -1,31 +1,46 @@
-import { useYjsSession } from "~/lib/adapters/yjs";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { styled } from "~/styles";
+import { StoreContext } from "../Store";
 
-type JoinBoardProps = {
-  onJoin: () => any;
-  onCopyBoard: () => any;
-};
+export const JoinBoard = () => {
+  const store = useContext(StoreContext);
+  const navigate = useNavigate();
 
-export const JoinBoard = ({ onJoin, onCopyBoard }: JoinBoardProps) => {
+  const handleMakeACopy = () => {
+    const newBoardId = store.createDuplicate();
+    navigate(newBoardId);
+  };
+
+  // Show the join dialogue once the session is loaded, if current user is not the board
+  // author and has not already given consent to join.
+  const displayJoinDialogue =
+    !store.isLoading &&
+    store.meta?.createdBy != null &&
+    store.meta.createdBy !== store.user.id &&
+    !store.collaborationConsent;
+
   return (
-    <ModalWrapper>
-      <Dialogue>
-        <DialogueHeader>
-          <h1>Fullscreen Sprint 3</h1>
-          <h2>Created by Rae on April 24, 2022</h2>
-        </DialogueHeader>
-        <DialogueBody>
-          Do you want to join this collaborative board and sync your changes
-          with anyone who has the link?
-        </DialogueBody>
-        <DialogueActions>
-          <Button primary onClick={onJoin}>
-            Join this board
-          </Button>
-          <Button onClick={onCopyBoard}>Make a copy</Button>
-        </DialogueActions>
-      </Dialogue>
-    </ModalWrapper>
+    displayJoinDialogue && (
+      <ModalWrapper>
+        <Dialogue>
+          <DialogueHeader>
+            <h1>Fullscreen Sprint 3</h1>
+            <h2>Created by Rae on April 24, 2022</h2>
+          </DialogueHeader>
+          <DialogueBody>
+            Do you want to join this collaborative board and sync your changes
+            with anyone who has the link?
+          </DialogueBody>
+          <DialogueActions>
+            <Button primary onClick={() => store.setCollaborationConsent(true)}>
+              Join this board
+            </Button>
+            <Button onClick={handleMakeACopy}>Make a copy</Button>
+          </DialogueActions>
+        </Dialogue>
+      </ModalWrapper>
+    )
   );
 };
 

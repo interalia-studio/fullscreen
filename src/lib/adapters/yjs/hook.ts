@@ -1,26 +1,33 @@
 import { TDBinding, TDShape, TDUser, TldrawApp } from "@tldraw/tldraw";
-import { useCallback, useEffect, useState, useMemo } from "react";
+import { useCallback, useEffect, useState, useMemo, useContext } from "react";
 import { v4 as uuid } from "uuid";
 import { WebsocketProvider } from "y-websocket";
 import * as Y from "yjs";
+import debug from "debug";
 
 import { FileProvider } from "./fileProvider";
-import Presence from "./presence";
+import YPresence from "./presence";
 import store from "./store";
-import { BoardId, BoardMeta, FSAdapter, FSUser, UserId } from "~/types";
+import {
+  BoardContents,
+  BoardId,
+  BoardMeta,
+  FSAdapter,
+  FSUser,
+  UserId,
+} from "~/types";
 import { getUserId } from "./identity";
+import { AppContext } from "~/components/Canvas";
+
+const log = debug("fs:yjs");
 
 /**
- * A `YjsSession` uses a Websocket connection to a relay server to sync document
+ * A `useYjsAdapter` uses a Websocket connection to a relay server to sync document
  * changes and presence updates between collaborators.
  *
  * It can serialise and deserialise to a binary format.
  */
-export const useYjsSession = (
-  app: TldrawApp,
-  passive: boolean,
-  boardId: BoardId
-): FSAdapter => {
+export const useYjsAdapter = (boardId: BoardId): FSAdapter => {
   // This is false until the page state has been loaded from yjs
   const [isLoading, setLoading] = useState(true);
 
@@ -30,36 +37,38 @@ export const useYjsSession = (
   // Board metadata synced to y.js
   const [boardMeta, setBoardMeta] = useState<BoardMeta>(null);
 
+  const [boardContents, setBoardContents] = useState({} as BoardContents);
+
+  // When set, don't broadcast changes and presence.
+  const [passiveMode, setPassiveMode] = useState(true);
+
   // @TODO: Connect file provider to file handle after saving from a browser that
   // implements the Filesystem Access API in order to auto-save.
   const localProvider = useMemo(() => new FileProvider(store.doc), [boardId]);
 
-  const networkProvider = useMemo(
-    () =>
-      new WebsocketProvider(
-        "wss://yjs.fullscreen.space",
-        `yjs-fullscreen-${boardId}`,
-        store.doc,
-        {
-          connect: true,
-        }
-      ),
-    [boardId]
-  );
+  const networkProvider = useMemo(() => {
+    return new WebsocketProvider(
+      "wss://yjs.fullscreen.space",
+      `yjs-fullscreen-${boardId}`,
+      store.doc,
+      {
+        connect: true,
+      }
+    );
+  }, [boardId]);
 
-  const room = useMemo(() => {
-    // Don't initialise room if app is not ready.
-    if (!app) return;
-    return new Presence(networkProvider, app);
-  }, [networkProvider, app]);
+  const presence = useMemo(() => {
+    if (!networkProvider) return;
+    return new YPresence(networkProvider);
+  }, [networkProvider]);
 
-  /**
-   * Replaces the full Tldraw document with shapes and bindings from y.js.
-   */
-  const replacePageWithDocState = () => {
+  const updateBoardContentsFromYjs = () => {
     const shapes = Object.fromEntries(store.yShapes.entries());
     const bindings = Object.fromEntries(store.yBindings.entries());
-    app.replacePageContent(shapes, bindings, {});
+    setBoardContents({
+      shapes,
+      bindings,
+    });
   };
 
   /**
@@ -107,20 +116,16 @@ export const useYjsSession = (
    * Connect Y.js doc to Tldraw widget and register teardown handlers
    */
   useEffect(() => {
-    if (!app) return;
-
-    room.connect(app);
-
     async function setup() {
       store.board.observe(updateBoardMeta);
-      store.yShapes.observeDeep(replacePageWithDocState);
+      store.yShapes.observeDeep(updateBoardContentsFromYjs);
       updateBoardMeta;
-      replacePageWithDocState();
+      updateBoardContentsFromYjs();
       setLoading(false);
     }
 
     const tearDown = () => {
-      store.yShapes.unobserveDeep(replacePageWithDocState);
+      store.yShapes.unobserveDeep(updateBoardContentsFromYjs);
       if (networkProvider) networkProvider.disconnect();
     };
 
@@ -128,15 +133,15 @@ export const useYjsSession = (
     setup();
 
     return () => {
-      room.disconnect();
+      presence.disconnect();
       window.removeEventListener("beforeunload", tearDown);
     };
-  }, [boardId, app]);
+  }, [boardId]);
 
   /**
    * Create a new board and return its id.
    */
-  const createDocument = (): string => {
+  const createDocument = (): BoardId => {
     // Create a new document instance.
     store.reset(null);
 
@@ -154,14 +159,13 @@ export const useYjsSession = (
   };
 
   /**
-   * Load a binary representation of a document into the page and
-   * reconnect the network provider.
+   * Load a binary representation of a document.
    */
-  const loadDocument = (serialisedDocument: Uint8Array): string => {
+  const loadDocument = (serialisedDocument: Uint8Array): BoardId => {
     setLoading(true);
     store.reset(serialisedDocument);
     if (networkProvider) networkProvider.disconnect();
-    replacePageWithDocState();
+    updateBoardContentsFromYjs();
     setLoading(false);
 
     // Validate that board has all metadata
@@ -173,14 +177,15 @@ export const useYjsSession = (
       alert("Outdated document doesn't contain required metadata");
       return createDocument();
     }
+
     return boardId;
   };
 
   /**
-   * Creeate and join a copy of the current board that can be edited independently.
+   * Create and join a copy of the current board that can be edited independently.
    *
    * Disconnects the network provider and changes the board's `id`. When the network provider
-   * reconnects it will send changes to a new room because the id has changed.
+   * reconnects it will send changes to a new Y.js room because the id has changed.
    *
    * @returns the newly created boardId
    */
@@ -199,34 +204,44 @@ export const useYjsSession = (
    */
   const serialiseDocument = (): Uint8Array => Y.encodeStateAsUpdate(store.doc);
 
+  /**
+   * Broadcasts presence information unless store is in passive mode.
+   */
+  const updatePresence = (userPresence: TDUser) => {
+    if (!passiveMode && presence) presence.update(fsUser.id, userPresence);
+  };
+
   return {
     isLoading,
+    passiveMode,
+    setPassiveMode,
+
     createDocument,
     loadDocument,
     createDuplicate,
     serialiseDocument,
-    board: {
-      id: boardId,
+
+    user: fsUser,
+    presence: presence,
+    updatePresence,
+
+    contents: boardContents,
+    meta: {
+      id: boardMeta?.id,
       createdBy: boardMeta?.createdBy,
       createdOn: boardMeta?.createdOn,
     },
-    user: fsUser,
+
     eventHandlers: {
       onChangePage: handleChangePage,
 
       onUndo: useCallback(() => {
         store.undo();
-      }, [boardId]),
+      }, [boardMeta?.id]),
 
       onRedo: useCallback(() => {
         store.redo();
-      }, [boardId]),
-
-      onChangePresence: useCallback(
-        (app: TldrawApp, user: TDUser) =>
-          app && !passive && room && room.update(app.room.userId, user),
-        [room]
-      ),
+      }, [boardMeta?.id]),
     },
   };
 };
