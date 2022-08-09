@@ -11,9 +11,11 @@ import { StoreContext } from ".";
 
 /**
  * Initialises a network adapter and provides a `StoreContext`.
+ *
+ * Navigates to a new document if `boardId` is not set.
  */
 export const Store: React.FC<{
-  boardId: BoardId;
+  boardId: BoardId | null;
   children: React.ReactNode;
 }> = (props) => {
   const navigate = useNavigate();
@@ -75,6 +77,10 @@ export const Store: React.FC<{
       }),
     [props.boardId, adapter]
   );
+
+  useEffect(() => {
+    if (props.boardId == null) handleNewProject();
+  }, [props.boardId]);
 
   return (
     !adapter.isLoading && (

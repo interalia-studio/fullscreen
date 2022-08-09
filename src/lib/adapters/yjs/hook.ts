@@ -8,16 +8,8 @@ import debug from "debug";
 import { FileProvider } from "./fileProvider";
 import YPresence from "./presence";
 import store from "./store";
-import {
-  BoardContents,
-  BoardId,
-  BoardMeta,
-  FSAdapter,
-  FSUser,
-  UserId,
-} from "~/types";
+import { BoardContents, BoardId, BoardMeta, FSAdapter, FSUser } from "~/types";
 import { getUserId } from "./identity";
-import { AppContext } from "~/components/Canvas";
 
 const log = debug("fs:yjs");
 
@@ -47,6 +39,8 @@ export const useYjsAdapter = (boardId: BoardId): FSAdapter => {
   const localProvider = useMemo(() => new FileProvider(store.doc), [boardId]);
 
   const networkProvider = useMemo(() => {
+    if (!boardId) return;
+
     return new WebsocketProvider(
       "wss://yjs.fullscreen.space",
       `yjs-fullscreen-${boardId}`,
@@ -116,6 +110,8 @@ export const useYjsAdapter = (boardId: BoardId): FSAdapter => {
    * Connect Y.js doc to Tldraw widget and register teardown handlers
    */
   useEffect(() => {
+    if (!boardId) return;
+
     async function setup() {
       store.board.observe(updateBoardMeta);
       store.yShapes.observeDeep(updateBoardContentsFromYjs);

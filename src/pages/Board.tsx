@@ -10,8 +10,6 @@ export const Board = () => {
   const { boardId } = useParams();
   let navigate = useNavigate();
 
-  if (boardId == null || boardId.length == 0) navigate("/");
-
   return (
     <main>
       <Store boardId={boardId as string}>
