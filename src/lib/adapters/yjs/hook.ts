@@ -109,7 +109,7 @@ export const useYjsAdapter = (boardId: BoardId): FSAdapter => {
         });
       });
     },
-    [boardId]
+    [boardId, store.undoManager, store.doc, store.yShapes, store.yBindings]
   );
 
   /**
@@ -207,9 +207,12 @@ export const useYjsAdapter = (boardId: BoardId): FSAdapter => {
   /**
    * Broadcasts presence information unless store is in passive mode.
    */
-  const updatePresence = (userPresence: TDUser) => {
-    if (!passiveMode && presence) presence.update(fsUser.id, userPresence);
-  };
+  const updatePresence = useCallback(
+    (userPresence: TDUser) => {
+      if (!passiveMode && presence) presence.update(fsUser.id, userPresence);
+    },
+    [passiveMode, presence, fsUser]
+  );
 
   return {
     isLoading,
