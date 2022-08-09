@@ -12,8 +12,11 @@ export const { styled, globalCss } = createStitches({
       border: "rgba(144, 144, 144, .32)",
       active: "dodgerblue",
       red: "#E35549",
+      redHover: "#BF483D",
       blue: "#5556AD",
+      blueHover: "#3E4080",
       green: "#36865A",
+      greenHover: "#296644",
     },
     space: {
       0: "2px",

@@ -30,6 +30,11 @@ export const Canvas = ({ boardId }: { boardId: string }) => {
 
   const session = useYjsSession(tldrawApp, !shouldJoin, boardId);
 
+  useEffect(() => {
+    if (session?.board == null || session?.user == null) return;
+    setShouldJoin(session.board.createdBy === session.user.id);
+  }, [session?.board]);
+
   const handleNewProject = () => {
     const newBoardId = session.createDocument();
     navigate(`/board/${newBoardId}`);

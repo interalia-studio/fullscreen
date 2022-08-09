@@ -7,7 +7,8 @@ import * as Y from "yjs";
 import { FileProvider } from "./fileProvider";
 import Presence from "./presence";
 import store from "./store";
-import { BoardId, FSAdapter } from "~/types";
+import { BoardId, BoardMeta, FSAdapter, UserId } from "~/types";
+import { getUserId } from "./identity";
 
 /**
  * A `YjsSession` uses a Websocket connection to a relay server to sync document
@@ -22,6 +23,11 @@ export const useYjsSession = (
 ): FSAdapter => {
   // This is false until the page state has been loaded from yjs
   const [isLoading, setLoading] = useState(true);
+
+  // Fullscreen-scoped user id.
+  const [userId, _] = useState<UserId>(getUserId());
+
+  const [boardMeta, setBoardMeta] = useState<BoardMeta>(null);
 
   // @TODO: Connect file provider to file handle after saving from a browser that
   // implements the Filesystem Access API in order to auto-save.
@@ -95,6 +101,13 @@ export const useYjsSession = (
 
     async function setup() {
       store.yShapes.observeDeep(replacePageWithDocState);
+      store.board.observe(() => {
+        setBoardMeta({
+          id: store.board.get("id"),
+          createdBy: store.board.get("createdBy"),
+          createdOn: new Date(store.board.get("createdOn")),
+        });
+      });
       replacePageWithDocState();
       setLoading(false);
     }
@@ -117,13 +130,19 @@ export const useYjsSession = (
    * Create a new board and return its id.
    */
   const createDocument = (): string => {
+    // Create a new document instance.
     store.reset(null);
+
+    // Set metadata.
     const newBoardId = uuid();
     // Prevent undoing initial set of the board id
     store.undoManager.stopCapturing();
     store.doc.transact(() => {
       store.board.set("id", newBoardId);
+      store.board.set("createdBy", userId);
+      store.board.set("createdOn", new Date().toUTCString());
     });
+
     return newBoardId;
   };
 
@@ -137,25 +156,35 @@ export const useYjsSession = (
     if (networkProvider) networkProvider.disconnect();
     replacePageWithDocState();
     setLoading(false);
-    const boardId = store.board.get("id");
+
+    // Validate that board has all metadata
     // TODO: Remove this once yjs.fullscreen.space doesn't contain documents without `boardId`.
-    if (boardId == null) {
-      alert("Outdated document doesn't contain a board id");
+    const boardId = store.board.get("id");
+    const creator = store.board.get("createdBy");
+    const createdOn = store.board.get("createdOn");
+    if (boardId == null || creator == null || createdOn == null) {
+      alert("Outdated document doesn't contain required metadata");
       return createDocument();
     }
     return boardId;
   };
 
   /**
-   * Create a copy of a board that can be edited independently.
+   * Creeate and join a copy of the current board that can be edited independently.
    *
-   * @param boardId the original boardId
+   * Disconnects the network provider and changes the board's `id`. When the network provider
+   * reconnects it will send changes to a new room because the id has changed.
+   *
    * @returns the newly created boardId
    */
-  const createDuplicate = async (boardId: BoardId): Promise<BoardId> => {
-    // TODO
-    console.log("createDuplicate not yet implemented");
-    return boardId;
+  const createDuplicate = (): BoardId => {
+    if (networkProvider) networkProvider.disconnect();
+    store.undoManager.stopCapturing();
+    const newBoardId = uuid();
+    store.board.set("id", newBoardId);
+    store.board.set("createdBy", userId);
+    store.board.set("createdOn", new Date().toUTCString());
+    return newBoardId;
   };
 
   /**
@@ -169,6 +198,14 @@ export const useYjsSession = (
     loadDocument,
     createDuplicate,
     serialiseDocument,
+    board: {
+      id: boardId,
+      createdBy: boardMeta?.createdBy,
+      createdOn: boardMeta?.createdOn,
+    },
+    user: {
+      id: userId,
+    },
     eventHandlers: {
       onChangePage: handleChangePage,
 

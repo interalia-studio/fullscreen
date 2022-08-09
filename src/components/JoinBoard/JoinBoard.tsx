@@ -1,3 +1,4 @@
+import { useYjsSession } from "~/adapters/yjs";
 import { styled } from "~/styles";
 
 type JoinBoardProps = {
@@ -68,19 +69,23 @@ const Button = styled("button", {
   display: "inline-block",
   padding: "5px 10px",
   backgroundColor: "white",
-  borderRadius: 3,
+  borderRadius: "$2",
+  borderWidth: "2px",
   cursor: "pointer",
   "& + &": {
     marginLeft: 10,
   },
   "&:hover": {
-    backdropFilter: "brightness(85%)",
+    backgroundColor: "$hover",
   },
   variants: {
     primary: {
       true: {
         backgroundColor: "$blue",
         color: "white",
+        "&:hover": {
+          backgroundColor: "$blueHover",
+        },
       },
     },
   },
