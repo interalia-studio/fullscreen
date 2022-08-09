@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Self-hosted Urbanist web font [#59](https://github.com/interalia-studio/fullscreen/pull/59)
 - More tools for the new toolbar [#61](https://github.com/interalia-studio/fullscreen/pull/61)
 - Onboarding dialogue when joining a board on the web [#66](https://github.com/interalia-studio/fullscreen/pull/66)
+- Create a new board when navigating to board/ [#68](https://github.com/interalia-studio/fullscreen/pull/68)
 - Add board-not-found dialogue [#69](https://github.com/interalia-studio/fullscreen/pull/69)
 
 ### Changed

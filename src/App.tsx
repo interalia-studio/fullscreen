@@ -11,6 +11,7 @@ const App = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/board" element={<Board />} />
         <Route path="/board/:boardId" element={<Board />} />
         <Route path="/" element={<Home />} />
       </Routes>
