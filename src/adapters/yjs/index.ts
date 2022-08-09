@@ -7,7 +7,7 @@ import * as Y from "yjs";
 import { FileProvider } from "./fileProvider";
 import Presence from "./presence";
 import store from "./store";
-import { BoardId, BoardMeta, FSAdapter, UserId } from "~/types";
+import { BoardId, BoardMeta, FSAdapter, FSUser, UserId } from "~/types";
 import { getUserId } from "./identity";
 
 /**
@@ -24,9 +24,10 @@ export const useYjsSession = (
   // This is false until the page state has been loaded from yjs
   const [isLoading, setLoading] = useState(true);
 
-  // Fullscreen-scoped user id.
-  const [userId, _] = useState<UserId>(getUserId());
+  // Fullscreen-scoped user.
+  const [fsUser, _] = useState<FSUser>({ id: getUserId() });
 
+  // Board metadata synced to y.js
   const [boardMeta, setBoardMeta] = useState<BoardMeta>(null);
 
   // @TODO: Connect file provider to file handle after saving from a browser that
@@ -145,7 +146,7 @@ export const useYjsSession = (
     store.undoManager.stopCapturing();
     store.doc.transact(() => {
       store.board.set("id", newBoardId);
-      store.board.set("createdBy", userId);
+      store.board.set("createdBy", fsUser.id);
       store.board.set("createdOn", new Date().toUTCString());
     });
 
@@ -188,7 +189,7 @@ export const useYjsSession = (
     store.undoManager.stopCapturing();
     const newBoardId = uuid();
     store.board.set("id", newBoardId);
-    store.board.set("createdBy", userId);
+    store.board.set("createdBy", fsUser.id);
     store.board.set("createdOn", new Date().toUTCString());
     return newBoardId;
   };
@@ -209,9 +210,7 @@ export const useYjsSession = (
       createdBy: boardMeta?.createdBy,
       createdOn: boardMeta?.createdOn,
     },
-    user: {
-      id: userId,
-    },
+    user: fsUser,
     eventHandlers: {
       onChangePage: handleChangePage,
 
