@@ -62,6 +62,17 @@ export const useYjsSession = (
   };
 
   /**
+   * Update board metadata state from y.js
+   */
+  const updateBoardMeta = () => {
+    setBoardMeta({
+      id: store.board.get("id"),
+      createdBy: store.board.get("createdBy"),
+      createdOn: new Date(store.board.get("createdOn")),
+    });
+  };
+
+  /**
    * Handle changes made through the TLDraw widget.
    */
   const handleChangePage = useCallback(
@@ -100,14 +111,9 @@ export const useYjsSession = (
     room.connect(app);
 
     async function setup() {
+      store.board.observe(updateBoardMeta);
       store.yShapes.observeDeep(replacePageWithDocState);
-      store.board.observe(() => {
-        setBoardMeta({
-          id: store.board.get("id"),
-          createdBy: store.board.get("createdBy"),
-          createdOn: new Date(store.board.get("createdOn")),
-        });
-      });
+      updateBoardMeta;
       replacePageWithDocState();
       setLoading(false);
     }

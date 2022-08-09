@@ -15,9 +15,10 @@ export const Canvas = ({ boardId }: { boardId: string }) => {
 
   const [tldrawApp, setTLDrawApp] = useState<TldrawApp>();
 
-  // Set to false to "watch" the board without indicating presence or
-  // making changes.
-  const [shouldJoin, setShouldJoin] = useState<boolean>(isNativeApp());
+  // True when user has given consent to broadcast their changes and presence.
+  const [collaborationConsent, setCollaborationConsent] = useState<boolean>(
+    isNativeApp()
+  );
 
   const handleMount = useCallback(
     (tldraw: TldrawApp) => {
@@ -28,12 +29,7 @@ export const Canvas = ({ boardId }: { boardId: string }) => {
     [boardId]
   );
 
-  const session = useYjsSession(tldrawApp, !shouldJoin, boardId);
-
-  useEffect(() => {
-    if (session?.board == null || session?.user == null) return;
-    setShouldJoin(session.board.createdBy === session.user.id);
-  }, [session?.board]);
+  const session = useYjsSession(tldrawApp, !collaborationConsent, boardId);
 
   const handleNewProject = () => {
     const newBoardId = session.createDocument();
@@ -73,13 +69,21 @@ export const Canvas = ({ boardId }: { boardId: string }) => {
     navigate(`/board/${newBoardId}`);
   };
 
+  // Show the join dialogue once the session is loaded, if current user is not the board
+  // author and has not already given consent to join.
+  const displayJoinDialogue =
+    !session.isLoading &&
+    session.board?.createdBy != null &&
+    session.board.createdBy !== session.user.id &&
+    !collaborationConsent;
+
   return (
     <div className="tldraw">
       <Tldraw
         disableAssets
         showPages={false}
         showMultiplayerMenu={false}
-        readOnly={session?.isLoading || !shouldJoin}
+        readOnly={session?.isLoading || !collaborationConsent}
         onMount={handleMount}
         onNewProject={handleNewProject}
         onOpenProject={handleOpenProject}
@@ -93,10 +97,9 @@ export const Canvas = ({ boardId }: { boardId: string }) => {
         <AppContext.Provider value={tldrawApp}>
           <Toolbar />
 
-          {/* Show _Join Board_ dialogue for web users until user has decided to join or navigated away. */}
-          {shouldJoin != true && (
+          {displayJoinDialogue && (
             <JoinBoard
-              onJoin={() => setShouldJoin(true)}
+              onJoin={() => setCollaborationConsent(true)}
               onCopyBoard={openDuplicate}
             />
           )}
