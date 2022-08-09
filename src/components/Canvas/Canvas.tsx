@@ -19,9 +19,6 @@ export const Canvas = ({ boardId }: { boardId: string }) => {
   // making changes.
   const [shouldJoin, setShouldJoin] = useState<boolean>(isNativeApp());
 
-  // True while a board is being duplicated.
-  const [isCopyingBoard, setIsCopyingBoard] = useState<boolean>(false);
-
   const handleMount = useCallback(
     (tldraw: TldrawApp) => {
       tldraw.loadRoom(boardId);
@@ -67,9 +64,7 @@ export const Canvas = ({ boardId }: { boardId: string }) => {
   }, []);
 
   const openDuplicate = async () => {
-    setIsCopyingBoard(true);
-    const newBoardId = await session.createDuplicate(boardId);
-    setIsCopyingBoard(false);
+    const newBoardId = session.createDuplicate(boardId);
     navigate(`/board/${newBoardId}`);
   };
 
@@ -98,7 +93,6 @@ export const Canvas = ({ boardId }: { boardId: string }) => {
             <JoinBoard
               onJoin={() => setShouldJoin(true)}
               onCopyBoard={openDuplicate}
-              isCopyingBoard={isCopyingBoard}
             />
           )}
         </AppContext.Provider>

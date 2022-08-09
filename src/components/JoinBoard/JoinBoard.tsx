@@ -3,14 +3,9 @@ import { styled } from "~/styles";
 type JoinBoardProps = {
   onJoin: () => any;
   onCopyBoard: () => any;
-  isCopyingBoard: boolean;
 };
 
-export const JoinBoard = ({
-  onJoin,
-  onCopyBoard,
-  isCopyingBoard,
-}: JoinBoardProps) => {
+export const JoinBoard = ({ onJoin, onCopyBoard }: JoinBoardProps) => {
   return (
     <ModalWrapper>
       <Dialogue>
@@ -23,12 +18,10 @@ export const JoinBoard = ({
           with anyone who has the link?
         </DialogueBody>
         <DialogueActions>
-          <Button primary onClick={onJoin} disabled={isCopyingBoard}>
+          <Button primary onClick={onJoin}>
             Join this board
           </Button>
-          <Button onClick={onCopyBoard} disabled={true}>
-            Make a copy
-          </Button>
+          <Button onClick={onCopyBoard}>Make a copy</Button>
         </DialogueActions>
       </Dialogue>
     </ModalWrapper>
