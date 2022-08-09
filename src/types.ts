@@ -16,6 +16,11 @@ export interface FSBoard {
 export type BoardId = string;
 export type UserId = string;
 
+export enum BoardStatus {
+  Ok,
+  NotFound,
+}
+
 export type BoardMeta = {
   /**
    * Fullscreen board id (store state).
@@ -80,6 +85,11 @@ export interface FSAdapter {
    * Update presence information of the current user.
    */
   updatePresence: (tdUser: TDUser) => void;
+
+  /**
+   * Availability of the board.
+   */
+  status: BoardStatus;
 
   /**
    * Metadata about the current board as it exists in the network.

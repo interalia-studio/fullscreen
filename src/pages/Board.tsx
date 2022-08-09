@@ -5,6 +5,7 @@ import { Store } from "~/components/Store/Store";
 import { Canvas } from "~/components/Canvas";
 import { Toolbar } from "~/components/Toolbar";
 import { JoinBoard } from "~/components/JoinBoard";
+import { BoardStatusDialogue } from "~/components/BoardStatusDialogue";
 
 export const Board = () => {
   const { boardId } = useParams();
@@ -18,6 +19,7 @@ export const Board = () => {
         <Canvas>
           <Toolbar />
           <JoinBoard />
+          <BoardStatusDialogue />
         </Canvas>
       </Store>
     </main>
