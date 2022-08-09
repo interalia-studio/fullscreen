@@ -17,7 +17,7 @@ export const Canvas = ({ boardId }: { boardId: string }) => {
 
   // Set to false to "watch" the board without indicating presence or
   // making changes.
-  const [shouldJoin, setShouldJoin] = useState<boolean>(false);
+  const [shouldJoin, setShouldJoin] = useState<boolean>(isNativeApp());
 
   // True while a board is being duplicated.
   const [isCopyingBoard, setIsCopyingBoard] = useState<boolean>(false);
@@ -93,7 +93,7 @@ export const Canvas = ({ boardId }: { boardId: string }) => {
         <AppContext.Provider value={tldrawApp}>
           <Toolbar />
 
-          {/* Show _Join Board_ dialogue until user has decided to join or navigated away. */}
+          {/* Show _Join Board_ dialogue for web users until user has decided to join or navigated away. */}
           {shouldJoin != true && (
             <JoinBoard
               onJoin={() => setShouldJoin(true)}
