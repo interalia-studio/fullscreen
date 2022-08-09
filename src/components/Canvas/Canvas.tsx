@@ -3,7 +3,7 @@ import { appWindow } from "@tauri-apps/api/window";
 import React, { useEffect, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useYjsSession } from "~/adapters/yjs";
+import { useYjsSession } from "~/lib/adapters/yjs";
 import fileSystem from "~/lib/fileSystem";
 import { isNativeApp } from "~/lib/tauri";
 import { Toolbar } from "~/components/Toolbar";

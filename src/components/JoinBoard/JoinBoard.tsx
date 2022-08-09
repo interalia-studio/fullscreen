@@ -1,4 +1,4 @@
-import { useYjsSession } from "~/adapters/yjs";
+import { useYjsSession } from "~/lib/adapters/yjs";
 import { styled } from "~/styles";
 
 type JoinBoardProps = {
