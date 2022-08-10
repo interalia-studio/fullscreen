@@ -1,16 +1,16 @@
-import { useContext } from "react";
-
 import { styled } from "~/styles";
-import { StoreContext } from "../Store";
-import { isNativeApp } from "~/lib/tauri";
 import { FileMenu } from "./FileMenu";
+import { EditMenu } from "./EditMenu";
+import { ViewMenu } from "./ViewMenu";
+import { useCallback } from "react";
 
 export const MenuBar = () => {
-  const store = useContext(StoreContext);
   return (
     <Wrapper>
-      <FullscreenButton>Fullscreen</FullscreenButton>
+      <FullscreenButton disabled>Fullscreen</FullscreenButton>
       <FileMenu />
+      <EditMenu />
+      <ViewMenu />
     </Wrapper>
   );
 };
@@ -30,18 +30,9 @@ const Wrapper = styled("nav", {
 
 const FullscreenButton = styled("button", {
   fontFamily: "$text",
+  fontSize: "$3",
   border: "none",
   backgroundColor: "$text",
   color: "$background",
-  cursor: "pointer",
-
-  "&:hover": {
-    borderColor: "$green",
-    backgroundColor: "$green",
-  },
-
-  "&:focus": {
-    borderColor: "$green",
-    outline: "none",
-  },
+  padding: "0 13px",
 });

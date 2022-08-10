@@ -6,6 +6,7 @@ export const MenuRoot = Dropdown.Root;
 
 export const MenuButton = styled(Dropdown.Trigger, {
   fontFamily: "$text",
+  fontSize: "$3",
   border: "none",
   backgroundColor: "$text",
   color: "$background",
@@ -29,15 +30,15 @@ export const MenuContent = styled(Dropdown.Content, {
   padding: 3,
 });
 
-export const MenuItem = styled(Dropdown.Item, {
+const itemStyles = {
   all: "unset",
-  fontSize: 13,
+  fontSize: "$3",
   lineHeight: 1,
   color: "$background",
   borderRadius: 3,
   display: "flex",
   alignItems: "center",
-  height: 25,
+  height: "2em",
   padding: "0 5px 0 10px",
   position: "relative",
   userSelect: "none",
@@ -46,4 +47,17 @@ export const MenuItem = styled(Dropdown.Item, {
     backgroundColor: "$blue",
     color: "$background",
   },
+};
+
+export const MenuItem = styled(Dropdown.Item, itemStyles);
+
+export const CheckboxItem = styled(Dropdown.CheckboxItem, itemStyles);
+
+export const MenuIndicator = styled(Dropdown.ItemIndicator, {
+  position: "absolute",
+  right: 0,
+  width: 25,
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
 });
