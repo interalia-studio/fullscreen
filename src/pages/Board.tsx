@@ -1,21 +1,23 @@
-import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Store } from "~/components/Store/Store";
 
 import { Canvas } from "~/components/Canvas";
 import { Toolbar } from "~/components/Toolbar";
 import { JoinBoard } from "~/components/JoinBoard";
 import { BoardStatusDialogue } from "~/components/BoardStatusDialogue";
+import { MenuBar } from "~/components/MenuBar";
+import { BoardId } from "~/types";
 
 export const Board = () => {
   const { boardId } = useParams();
-  let navigate = useNavigate();
 
   return (
     <main>
-      <Store boardId={boardId as string}>
+      <Store boardId={boardId as BoardId}>
         <Canvas>
+          <MenuBar />
           <Toolbar />
+          {/* Components with conditional visibility: */}
           <JoinBoard />
           <BoardStatusDialogue />
         </Canvas>
