@@ -46,7 +46,6 @@ const SmallIcon = styled("div", {
   outline: "none",
   border: "none",
   pointerEvents: "all",
-  cursor: "pointer",
   color: "currentColor",
 
   "& svg": {
