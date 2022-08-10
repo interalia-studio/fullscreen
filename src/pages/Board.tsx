@@ -7,15 +7,15 @@ import { JoinBoard } from "~/components/JoinBoard";
 import { BoardStatusDialogue } from "~/components/BoardStatusDialogue";
 import { MenuBar } from "~/components/MenuBar";
 import { BoardId } from "~/types";
+import { isNativeApp } from "~/lib/tauri";
 
 export const Board = () => {
   const { boardId } = useParams();
-
   return (
     <main>
       <Store boardId={boardId as BoardId}>
         <Canvas>
-          <MenuBar />
+          {!isNativeApp() && <MenuBar />}
           <Toolbar />
           {/* Components with conditional visibility: */}
           <JoinBoard />

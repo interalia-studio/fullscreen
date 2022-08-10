@@ -13,16 +13,9 @@ export const FileMenu = () => {
       <MenuContent align="start">
         <MenuItem onClick={() => store.handleNewProject()}>New</MenuItem>
         <MenuItem onClick={() => store.handleOpenProject()}>Open</MenuItem>
-        {isNativeApp() && (
-          <MenuItem onClick={() => store.handleSaveProject()}>
-            Save as...
-          </MenuItem>
-        )}
-        {!isNativeApp() && (
-          <MenuItem onClick={() => store.handleSaveProject()}>
-            Save a copy
-          </MenuItem>
-        )}
+        <MenuItem onClick={() => store.handleSaveProject()}>
+          Save a copy
+        </MenuItem>
       </MenuContent>
     </MenuRoot>
   );

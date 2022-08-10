@@ -4,6 +4,9 @@ import { EditMenu } from "./EditMenu";
 import { ViewMenu } from "./ViewMenu";
 import { useCallback } from "react";
 
+/**
+ * Menubar that is only shown in the web app.
+ */
 export const MenuBar = () => {
   return (
     <Wrapper>

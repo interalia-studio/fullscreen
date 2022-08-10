@@ -62,9 +62,9 @@ export const Canvas: React.FC<{
         onNewProject={store.handleNewProject}
         onOpenProject={store.handleOpenProject}
         onSaveProject={store.handleSaveProject}
-        showMenu={!isNativeApp()}
-        // Disable TLDraw's own toolbar.
+        showMenu={false}
         showTools={false}
+        showStyles={false}
         onChangePresence={handlePresenceChange}
         {...store?.eventHandlers}
       />
