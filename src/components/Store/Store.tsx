@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 import { useYjsAdapter } from "~/lib/adapters/yjs";
 import { BoardId } from "~/types";
-import { AppContext } from "~/components/Canvas";
 import { isNativeApp } from "~/lib/tauri";
 import fileSystem from "~/lib/fileSystem";
 import { StoreContext } from ".";
@@ -21,21 +20,17 @@ export const Store: React.FC<{
   const navigate = useNavigate();
   const adapter = useYjsAdapter(props.boardId);
 
-  const handleNewProject = useCallback(() => {
-    const newBoardId = adapter.createDocument();
-    navigate(`/board/${newBoardId}`);
-  }, [adapter, navigate]);
+  // True when user has given consent to broadcast their changes and presence.
+  const [collaborationConsent, setCollaborationConsent] = useState<boolean>(
+    isNativeApp()
+  );
 
-  const handleOpenProject = useCallback(async () => {
-    const fileContents = await fileSystem.openFile();
-    const newBoardId = adapter.loadDocument(fileContents);
-    navigate(`/board/${newBoardId}`);
-  }, [adapter]);
-
-  const handleSaveProject = useCallback(async () => {
-    const fileContents = adapter.serialiseDocument();
-    await fileSystem.saveFile(fileContents);
-  }, [adapter]);
+  useEffect(() => {
+    if (!isNativeApp()) {
+      const isCreator = adapter.meta?.createdBy === adapter.user.id;
+      adapter.setPassiveMode(!collaborationConsent && !isCreator);
+    }
+  }, [collaborationConsent]);
 
   /**
    * Setup Tauri event handlers on mount
@@ -54,17 +49,24 @@ export const Store: React.FC<{
     }
   }, []);
 
-  // True when user has given consent to broadcast their changes and presence.
-  const [collaborationConsent, setCollaborationConsent] = useState<boolean>(
-    isNativeApp()
-  );
+  const handleNewProject = useCallback(() => {
+    const newBoardId = adapter.createDocument();
+    navigate(`/board/${newBoardId}`);
+  }, [adapter, navigate]);
 
-  useEffect(() => {
-    if (!isNativeApp()) {
-      adapter.setPassiveMode(collaborationConsent === false);
-    }
-  }, [collaborationConsent]);
+  const handleOpenProject = useCallback(async () => {
+    const fileContents = await fileSystem.openFile();
+    const newBoardId = adapter.loadDocument(fileContents);
+    navigate(`/board/${newBoardId}`);
+  }, [adapter]);
 
+  const handleSaveProject = useCallback(async () => {
+    const fileContents = adapter.serialiseDocument();
+    await fileSystem.saveFile(fileContents);
+  }, [adapter]);
+
+  // Store context extends the adapter with functionality that is independent
+  // of the network used.
   const context = useMemo(
     () =>
       Object.assign({}, adapter, {

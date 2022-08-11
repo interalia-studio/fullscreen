@@ -22,6 +22,7 @@ export default class YPresence implements PresenceAdapter {
   }
 
   connect(app: TldrawApp) {
+    log("connecting");
     this._handleDisconnect = this.room.subscribe(
       "others",
       throttle((users: any) => {
@@ -55,7 +56,7 @@ export default class YPresence implements PresenceAdapter {
 
   disconnect() {
     if (this._handleDisconnect) {
-      log("disconnecting presence");
+      log("disconnecting");
       this._handleDisconnect();
     }
   }
