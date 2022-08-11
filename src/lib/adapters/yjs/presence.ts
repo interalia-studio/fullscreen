@@ -4,7 +4,8 @@ import { WebsocketProvider } from "y-websocket";
 import debug from "debug";
 
 import { throttle } from "lodash";
-import { PresenceAdapter } from "~/types";
+import { BoardId, PresenceAdapter } from "~/types";
+import { useMemo } from "react";
 
 // Limit the frequency of presence updates so delays don't add up
 // and participant cursors get out of sync.
@@ -64,3 +65,10 @@ export default class YPresence implements PresenceAdapter {
     this.room.setPresence({ id, tdUser });
   };
 }
+
+export const usePresence = (websocketProvider: WebsocketProvider) => {
+  return useMemo(() => {
+    if (!websocketProvider) return;
+    return new YPresence(websocketProvider);
+  }, [websocketProvider]);
+};

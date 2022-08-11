@@ -1,12 +1,10 @@
 import { TDBinding, TDShape, TDUser, TldrawApp } from "@tldraw/tldraw";
-import { useCallback, useEffect, useState, useMemo, useContext } from "react";
 import { v4 as uuid } from "uuid";
-import { WebsocketProvider } from "y-websocket";
+import { useCallback, useEffect, useState, useMemo, useContext } from "react";
 import * as Y from "yjs";
-import debug from "debug";
 
 import { FileProvider } from "./fileProvider";
-import YPresence from "./presence";
+import { usePresence } from "./presence";
 import store from "./store";
 import {
   BoardContents,
@@ -17,8 +15,7 @@ import {
   BoardStatus,
 } from "~/types";
 import { getUserId } from "./identity";
-
-const log = debug("fs:yjs");
+import { useIndexedDbProvider, useWebsocketProvider } from "./providers";
 
 /**
  * A `useYjsAdapter` uses a Websocket connection to a relay server to sync document
@@ -47,23 +44,9 @@ export const useYjsAdapter = (boardId: BoardId): FSAdapter => {
   // implements the Filesystem Access API in order to auto-save.
   const localProvider = useMemo(() => new FileProvider(store.doc), [boardId]);
 
-  const networkProvider = useMemo(() => {
-    if (!boardId) return;
-
-    return new WebsocketProvider(
-      "wss://yjs.fullscreen.space",
-      `yjs-fullscreen-${boardId}`,
-      store.doc,
-      {
-        connect: true,
-      }
-    );
-  }, [boardId]);
-
-  const presence = useMemo(() => {
-    if (!networkProvider) return;
-    return new YPresence(networkProvider);
-  }, [networkProvider]);
+  const websocketProvider = useWebsocketProvider(boardId);
+  const presence = usePresence(websocketProvider);
+  const indexedDbProvider = useIndexedDbProvider(boardId);
 
   const updateBoardContentsFromYjs = () => {
     const shapes = Object.fromEntries(store.yShapes.entries());
@@ -144,7 +127,7 @@ export const useYjsAdapter = (boardId: BoardId): FSAdapter => {
     const tearDown = () => {
       store.board.unobserve(updateBoardMeta);
       store.yShapes.unobserveDeep(updateBoardContentsFromYjs);
-      if (networkProvider) networkProvider.disconnect();
+      if (websocketProvider) websocketProvider.disconnect();
     };
 
     window.addEventListener("beforeunload", tearDown);
@@ -182,7 +165,7 @@ export const useYjsAdapter = (boardId: BoardId): FSAdapter => {
   const loadDocument = (serialisedDocument: Uint8Array): BoardId => {
     setLoading(true);
     store.reset(serialisedDocument);
-    if (networkProvider) networkProvider.disconnect();
+    if (websocketProvider) websocketProvider.disconnect();
     updateBoardContentsFromYjs();
     setLoading(false);
 
@@ -208,7 +191,7 @@ export const useYjsAdapter = (boardId: BoardId): FSAdapter => {
    * @returns the newly created boardId
    */
   const createDuplicate = (): BoardId => {
-    if (networkProvider) networkProvider.disconnect();
+    if (websocketProvider) websocketProvider.disconnect();
     store.undoManager.stopCapturing();
     const newBoardId = uuid();
     store.board.set("id", newBoardId);

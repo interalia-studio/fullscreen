@@ -38,6 +38,7 @@
     "react-router-dom": "^6.3.0",
     "stitches-normalize-css": "^1.2.0",
     "uuid": "^8.3.2",
+    "y-indexeddb": "^9.0.9",
     "yjs": "^13.5.39"
   },
   "devDependencies": {
