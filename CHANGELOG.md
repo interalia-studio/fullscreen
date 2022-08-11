@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added a changelog [#33](https://github.com/interalia-studio/fullscreen/pull/33)
 - Typescript config [#64](https://github.com/interalia-studio/fullscreen/pull/64)
+- Refactored Y.js adapter hook [#73](https://github.com/interalia-studio/fullscreen/pull/73)
 
 ## [0.1.0]
 
