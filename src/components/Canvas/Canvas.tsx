@@ -46,7 +46,7 @@ export const Canvas: React.FC<{
 
   const handlePresenceChange = useCallback(
     (_app: TldrawApp, user: TDUser) => {
-      store.updatePresence(user);
+      store.presence.update(user);
     },
     [store]
   );

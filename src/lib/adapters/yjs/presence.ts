@@ -59,7 +59,7 @@ export default class YPresence implements PresenceAdapter {
 
   disconnect() {
     if (this._handleDisconnect) {
-      log("disconnecting presence");
+      log("disconnecting");
       this._handleDisconnect();
     }
   }
@@ -71,7 +71,7 @@ export default class YPresence implements PresenceAdapter {
 }
 
 /**
- * Provides callbacks for broadcasting presence information and for disconnecting.
+ * Provides callbacks for broadcasting presence information.
  *
  * No presence is broadcast when `passiveMode` is true or `fsUser` is not set.
  *
@@ -87,20 +87,28 @@ export const usePresence = (
     return new YPresence(websocketProvider);
   }, [websocketProvider]);
 
+  const connect = useCallback(
+    (app: TldrawApp) => {
+      presence?.connect(app);
+    },
+    [presence]
+  );
+
   const update = useCallback(
     (userPresence: TDUser) => {
       if (!passiveMode && presence) {
-        presence.update(fsUser.id, userPresence);
+        presence?.update(fsUser.id, userPresence);
       }
     },
-    [passiveMode, fsUser]
+    [presence, passiveMode, fsUser]
   );
 
   const disconnect = useCallback(() => {
-    presence.disconnect();
-  }, [websocketProvider]);
+    presence?.disconnect();
+  }, [presence]);
 
   return {
+    connect,
     update,
     disconnect,
   };

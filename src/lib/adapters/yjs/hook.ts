@@ -154,7 +154,7 @@ export const useYjsAdapter = (boardId: BoardId): FSAdapter => {
     document: documentHandlers,
 
     user: fsUser,
-    updatePresence: presence.update,
+    presence,
 
     contents: boardContents,
     meta: boardMeta,

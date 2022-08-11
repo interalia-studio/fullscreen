@@ -96,7 +96,11 @@ export interface FSAdapter {
   /**
    * Update presence information of the current user.
    */
-  updatePresence: (tdUser: TDUser) => void;
+  presence: {
+    connect: (app: TldrawApp) => void;
+    update: (userPresence: TDUser) => void;
+    disconnect: () => void;
+  };
 
   /**
    * Availability of the board.
