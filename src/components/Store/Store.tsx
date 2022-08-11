@@ -20,21 +20,19 @@ export const Store: React.FC<{
   const navigate = useNavigate();
   const adapter = useYjsAdapter(props.boardId);
 
-  const handleNewProject = useCallback(() => {
-    const newBoardId = adapter.document.create();
-    navigate(`/board/${newBoardId}`);
-  }, [adapter, navigate]);
+  // True when user has given consent to broadcast their changes and presence.
+  const [collaborationConsent, setCollaborationConsent] = useState<boolean>(
+    isNativeApp()
+  );
 
-  const handleOpenProject = useCallback(async () => {
-    const fileContents = await fileSystem.openFile();
-    const newBoardId = adapter.document.load(fileContents);
-    navigate(`/board/${newBoardId}`);
-  }, [adapter]);
-
-  const handleSaveProject = useCallback(async () => {
-    const fileContents = adapter.document.serialise();
-    await fileSystem.saveFile(fileContents);
-  }, [adapter]);
+  useEffect(() => {
+    if (!isNativeApp()) {
+      const isCreator = adapter.meta?.createdBy === adapter.user.id;
+      adapter.setPassiveMode(
+        !collaborationConsent && !isCreator && !isNativeApp()
+      );
+    }
+  }, [collaborationConsent]);
 
   /**
    * Setup Tauri event handlers on mount
@@ -53,17 +51,24 @@ export const Store: React.FC<{
     }
   }, []);
 
-  // True when user has given consent to broadcast their changes and presence.
-  const [collaborationConsent, setCollaborationConsent] = useState<boolean>(
-    isNativeApp()
-  );
+  const handleNewProject = useCallback(() => {
+    const newBoardId = adapter.document.create();
+    navigate(`/board/${newBoardId}`);
+  }, [adapter, navigate]);
 
-  useEffect(() => {
-    if (!isNativeApp()) {
-      adapter.setPassiveMode(collaborationConsent === false);
-    }
-  }, [collaborationConsent]);
+  const handleOpenProject = useCallback(async () => {
+    const fileContents = await fileSystem.openFile();
+    const newBoardId = adapter.document.load(fileContents);
+    navigate(`/board/${newBoardId}`);
+  }, [adapter]);
 
+  const handleSaveProject = useCallback(async () => {
+    const fileContents = adapter.document.serialise();
+    await fileSystem.saveFile(fileContents);
+  }, [adapter]);
+
+  // Store context extends the adapter with functionality that is independent
+  // of the network used.
   const context = useMemo(
     () =>
       Object.assign({}, adapter, {

@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Throttle presence updates [#35](https://github.com/interalia-studio/fullscreen/pull/35)
 - Fix CI cache [#60](https://github.com/interalia-studio/fullscreen/pull/60)
 - Fixed landing page rendering [#59](https://github.com/interalia-studio/fullscreen/pull/59)
+- Always broadcast presence when board creator [#74](https://github.com/interalia-studio/fullscreen/pull/74)
 
 ### Bits and bobs
 
