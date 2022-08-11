@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Create a new board when navigating to board/ [#68](https://github.com/interalia-studio/fullscreen/pull/68)
 - Board-not-found dialogue [#69](https://github.com/interalia-studio/fullscreen/pull/69)
 - Menu bar for web app [#71](https://github.com/interalia-studio/fullscreen/pull/71)
+- Offline mode using IndexedDB [#72](https://github.com/interalia-studio/fullscreen/pull/72)
 
 ### Changed
 
