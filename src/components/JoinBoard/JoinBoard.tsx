@@ -10,7 +10,7 @@ export const JoinBoard = () => {
   const navigate = useNavigate();
 
   const handleMakeACopy = () => {
-    const newBoardId = store.createDuplicate();
+    const newBoardId = store.document.duplicate();
     navigate(newBoardId);
   };
 
