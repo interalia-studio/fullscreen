@@ -16,6 +16,7 @@ import {
 } from "~/types";
 import { getUserId } from "./identity";
 import { useIndexedDbProvider, useWebsocketProvider } from "./providers";
+import { isNativeApp } from "~/lib/tauri";
 
 /**
  * A `useYjsAdapter` uses a Websocket connection to a relay server to sync document
@@ -38,7 +39,7 @@ export const useYjsAdapter = (boardId: BoardId): FSAdapter => {
   const [boardContents, setBoardContents] = useState({} as BoardContents);
 
   // When set, don't broadcast changes and presence.
-  const [passiveMode, setPassiveMode] = useState(true);
+  const [passiveMode, setPassiveMode] = useState(!isNativeApp());
 
   // @TODO: Connect file provider to file handle after saving from a browser that
   // implements the Filesystem Access API in order to auto-save.
