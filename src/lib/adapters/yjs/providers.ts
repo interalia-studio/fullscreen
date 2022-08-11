@@ -27,12 +27,14 @@ export const useIndexedDbProvider = (boardId: BoardId) => {
 
     const log = debug("fs:yjs:indexedDb");
 
+    // In private browsing mode this may throw an error inside a promise
+    // so `provider` may be null.
     const provider = new IndexeddbPersistence(
       `yjs-fullscreen-${boardId}`,
       store.doc
     );
 
-    provider?.on("synched", () => {
+    provider?.on("synced", () => {
       log("IndexedDB is synched");
     });
     return provider;
