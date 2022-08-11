@@ -28,7 +28,9 @@ export const Store: React.FC<{
   useEffect(() => {
     if (!isNativeApp()) {
       const isCreator = adapter.meta?.createdBy === adapter.user.id;
-      adapter.setPassiveMode(!collaborationConsent && !isCreator);
+      adapter.setPassiveMode(
+        !collaborationConsent && !isCreator && !isNativeApp()
+      );
     }
   }, [collaborationConsent]);
 
