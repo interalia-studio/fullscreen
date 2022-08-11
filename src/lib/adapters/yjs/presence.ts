@@ -4,8 +4,8 @@ import { WebsocketProvider } from "y-websocket";
 import debug from "debug";
 
 import { throttle } from "lodash";
-import { BoardId, PresenceAdapter } from "~/types";
-import { useMemo } from "react";
+import { BoardId, FSUser, PresenceAdapter } from "~/types";
+import { useCallback, useMemo } from "react";
 
 // Limit the frequency of presence updates so delays don't add up
 // and participant cursors get out of sync.
@@ -22,10 +22,14 @@ export default class YPresence implements PresenceAdapter {
   }
 
   connect(app: TldrawApp) {
+    log("connecting");
     this._handleDisconnect = this.room.subscribe(
       "others",
       throttle((users: any) => {
         if (!app.room) return;
+
+        log("updating");
+
         // Extract all TD user ids that have presence information
         const presentTdIds = users
           .filter((user) => user.presence)
@@ -66,9 +70,38 @@ export default class YPresence implements PresenceAdapter {
   };
 }
 
-export const usePresence = (websocketProvider: WebsocketProvider) => {
-  return useMemo(() => {
+/**
+ * Provides callbacks for broadcasting presence information and for disconnecting.
+ *
+ * No presence is broadcast when `passiveMode` is true or `fsUser` is not set.
+ *
+ * A connection is established whenever the Websocket provider changes.
+ */
+export const usePresence = (
+  websocketProvider: WebsocketProvider,
+  passiveMode: boolean,
+  fsUser: FSUser
+) => {
+  const presence = useMemo(() => {
     if (!websocketProvider) return;
     return new YPresence(websocketProvider);
   }, [websocketProvider]);
+
+  const update = useCallback(
+    (userPresence: TDUser) => {
+      if (!passiveMode && presence) {
+        presence.update(fsUser.id, userPresence);
+      }
+    },
+    [passiveMode, fsUser]
+  );
+
+  const disconnect = useCallback(() => {
+    presence.disconnect();
+  }, [websocketProvider]);
+
+  return {
+    update,
+    disconnect,
+  };
 };

@@ -48,6 +48,36 @@ export interface PresenceAdapter {
   update: (id: string, tdUser: TDUser) => void;
 }
 
+/**
+ * Handle document related actions.
+ */
+export interface FSDocumentHandlers {
+  /**
+   * Create a new board and return its id.
+   */
+  create: () => BoardId;
+
+  /**
+   * Load a binary representation of a document and subscribe to changes.
+   */
+  load: (input: Uint8Array) => BoardId;
+
+  /**
+   * Serialise the current board state.
+   */
+  serialise: () => Uint8Array;
+
+  /**
+   * Create a duplicate of the current board that can evolve independently.
+   */
+  duplicate: () => BoardId;
+
+  /**
+   * True while a document is being loaded.
+   */
+  isLoading: boolean;
+}
+
 export interface FSAdapter {
   isLoading: boolean;
 
@@ -61,25 +91,7 @@ export interface FSAdapter {
    */
   setPassiveMode: (enabled: boolean) => void;
 
-  /**
-   * Create a new board and return its id.
-   */
-  createDocument: () => BoardId;
-
-  /**
-   * Load a binary representation of a document and subscribe to changes.
-   */
-  loadDocument: (input: Uint8Array) => BoardId;
-
-  /**
-   * Serialise the current board state.
-   */
-  serialiseDocument: () => Uint8Array;
-
-  /**
-   * Create a duplicate of the current board that can evolve independently.
-   */
-  createDuplicate: () => BoardId;
+  document: FSDocumentHandlers;
 
   /**
    * Update presence information of the current user.
@@ -105,11 +117,6 @@ export interface FSAdapter {
    * Current Fullscreen user.
    */
   user: FSUser;
-
-  /**
-   * Exchanges presence updates between TLDraw and adapter.
-   */
-  presence: PresenceAdapter;
 
   /**
    * Any handlers to be registered on the TLDraw component.

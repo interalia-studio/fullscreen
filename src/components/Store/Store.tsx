@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 import { useYjsAdapter } from "~/lib/adapters/yjs";
 import { BoardId } from "~/types";
-import { AppContext } from "~/components/Canvas";
 import { isNativeApp } from "~/lib/tauri";
 import fileSystem from "~/lib/fileSystem";
 import { StoreContext } from ".";
@@ -22,18 +21,18 @@ export const Store: React.FC<{
   const adapter = useYjsAdapter(props.boardId);
 
   const handleNewProject = useCallback(() => {
-    const newBoardId = adapter.createDocument();
+    const newBoardId = adapter.document.create();
     navigate(`/board/${newBoardId}`);
   }, [adapter, navigate]);
 
   const handleOpenProject = useCallback(async () => {
     const fileContents = await fileSystem.openFile();
-    const newBoardId = adapter.loadDocument(fileContents);
+    const newBoardId = adapter.document.load(fileContents);
     navigate(`/board/${newBoardId}`);
   }, [adapter]);
 
   const handleSaveProject = useCallback(async () => {
-    const fileContents = adapter.serialiseDocument();
+    const fileContents = adapter.document.serialise();
     await fileSystem.saveFile(fileContents);
   }, [adapter]);
 
