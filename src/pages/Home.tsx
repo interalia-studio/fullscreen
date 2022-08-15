@@ -16,32 +16,33 @@ export const Home = () => {
 
   return (
     <HomeContainer>
-      <Heading>Fullscreen</Heading>
-      <Subheading>&mdash;truly, yours</Subheading>
-      <img
+      <Title>Fullscreen</Title>
+      <Subtitle>&mdash;truly, yours</Subtitle>
+      <img 
         src={require("~/assets/images/visual_play.png")}
-        alt="Fullscreen is a visual canvas app"
-      />
-      <Features>
-        <div>
-          <h2>No cloud required</h2>
-          <p>
+        alt="Fullscreen is a visual canvas app" />
+      <Heading>Fullscreen is a collaborative whiteboard that allows you to own your data.</Heading>
+      <Container>
+        <Box>
+          <Heading>No cloud required</Heading>
+          <Text>
             Fullscreen is local-first software. Your data will live on your computer, giving you full control over sharing and deleting.  You can work offline as well as in real-time in a collaborative session.          
-          </p>
-        </div>
-        <div>
-          <h2>Open and secure</h2>
-          <p>
+          </Text>
+        </Box>
+        <Box>
+          <Heading>Open and secure</Heading>
+          <Text>
             Fullscreen is open-source software. You will always be able to see what is in our codebase and have independent people check it for security. We implement strong privacy and safety standards.          
-          </p>
-        </div>
-        <div>
-        <h2>A canvas for teams</h2>
-        <p>
+          </Text>
+        </Box>
+        <Box>
+        <Heading>A canvas for teams</Heading>
+        <Text>
           Fullscreen focuses on visual note-taking for teams. This includes the basics for a whiteboard (texts, sticky notes, sections), as well as visualisation and facilitation features. Fullscreen is beginner-friendly in the web browser and offers expert options in the native app.         
-        </p>
-        </div>
-      </Features>
+        </Text>
+        </Box>
+      </Container>
+      <Button>Download Fullscreen</Button>
       <Logos>
         <LogoBMBF alt="gefördert vom Bundesministerium für Bildung und Forschung" />
         <LogoOKFN alt="Logo Open Knowledge Foundation Deutschland" />
@@ -54,47 +55,88 @@ const HomeContainer = styled("main", {
   display: "flex",
   alignItems: "left",
   flexDirection: "column",
-  padding: "$4",
+  padding: "150px",
   height: "100vh",
   width: "100vw",
   overflow: "auto",
+  fontFamily: "$text",
+  color: "$blue",
   backgroundColor: "$background",
 });
 
-const Heading = styled("h1", {
+const Title = styled("h1", {
   marginBottom: "1em",
   maxWidth: "15em",
   textAlign: "left",
-  fontFamily: "$text",
   fontSize: "3em",
-  color: "$blue",
   wordBreak: "keep-all",
   "@md": {
     fontSize: "5em",
   },
 });
 
-const Subheading = styled("h2", {
+const Subtitle = styled("h2", {
   marginBottom: "3em",
   maxWidth: "15em",
   textAlign: "right",
-  fontFamily: "$text",
   fontSize: "1.8em",  
-  color: "$blue",
   wordBreak: "keep-all",
   "@md": {
     fontSize: "3em",
   },
 });
 
-const Features = styled("section", {
-  display: "flex",
+const Container = styled("section", {
+  width: "100%",
+  display: "grid",
+  gridTemplateColumns: "50% 50%",
+  gridRow: "auto auto",
+  // gridColumnGap: "20px",
+  // gridRowGap:"20px",
   flexDirection: "column",
-  alignItems: "left",
+  alignItems: "center",
+  marginBottom: "3em",
   "@sm": {
     flexDirection: "row",
     justifyContent: "center",
   },
+});
+
+const Box = styled("div", {
+  padding: "20px",
+  flexDirection: "row",
+  alignItems: "center",
+  "@sm": {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+});
+
+const Text = styled("p", {
+  textAlign: "left",
+  "@sm": {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+});
+
+const Heading = styled("h3", {
+  marginBottom: "1em",
+  textAlign: "left",
+  fontSize: "1.8em",  
+  wordBreak: "keep-all",
+  "@md": {
+    fontSize: "1.8em",
+  },
+});
+
+const Button = styled("button", {
+  // display: "flex",
+  // flexDirection: "column",
+  // background: "$blue",
+  border: "3px solid $blue",
+  padding: "6px",
+  borderRadius: "10px",
 });
 
 const Logos = styled("section", {
