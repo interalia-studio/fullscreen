@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Offline mode using IndexedDB [#72](https://github.com/interalia-studio/fullscreen/pull/72)
 - Native app icon [#86](https://github.com/interalia-studio/fullscreen/pull/86)
 - Add menu items [#84](https://github.com/interalia-studio/fullscreen/pull/84)
+- License Fullscreen under AGPLv3 [#93](https://github.com/interalia-studio/fullscreen/pull/93)
 
 ### Changed
 

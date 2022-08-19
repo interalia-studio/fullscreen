@@ -28,4 +28,6 @@ rustup target add x86_64-apple-darwin
 
 ## License
 
+Fullscreen is licensed under [AGPLv3](./LICENSE).
+
 The Urbanist font is licensed under the [Open Font License](licenses/OFL.txt).
