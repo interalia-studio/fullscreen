@@ -24,11 +24,11 @@ export const { styled, globalCss } = createStitches({
       5: "16px",
     },
     fontSizes: {
-      0: "10px",
-      1: "12px",
-      2: "13px",
-      3: "16px",
-      4: "18px",
+      0: "12px",
+      1: "18px",
+      2: "20px",
+      3: "30px",
+      4: "50px",
     },
     fonts: {
       text: '"Urbanist", system-ui, sans-serif',
@@ -54,7 +54,7 @@ export const { styled, globalCss } = createStitches({
     transitions: {},
   },
   media: {
-    xs: "(max-width: 370px)",
+    xs: "(max-width: 640px)",
     sm: "(min-width: 640px)",
     md: "(min-width: 768px)",
     lg: "(min-width: 1024px)",

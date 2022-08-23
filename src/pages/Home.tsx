@@ -18,31 +18,43 @@ export const Home = () => {
   return (
     <Wrapper>
       <HomeContainer>
-        <Title>Fullscreen</Title>
-        <Subtitle>&mdash;truly, yours.</Subtitle>
-        <HeroImage src={require("~/assets/images/visual_play.png")} alt="Fullscreen is a visual canvas app"/>
-        <Heading>Fullscreen is a collaborative whiteboard that allows you to own your data.</Heading>
-          <Features>
+      <Logo src={require("~/assets/images/fullscreen_logo.png")} alt="Fullscreen Logo"/>
+        <Hero>
+          <Title>Fullscreen is a collaborative whiteboard that allows you to own your data.</Title>
+          <ButtonGroup>
+            <PrimaryButton>Open in browser</PrimaryButton>
+            <Button>Download Fullscreen</Button>
+          </ButtonGroup>
+        </Hero>
+        <Feature>
+          <Visual src={require("~/assets/images/visual1.png")} alt="Fullscreen Visual 1"/>
             <Box>
               <Heading>No cloud required</Heading>
                 <Text>
                   Fullscreen is local-first software. Your data will live on your computer, giving you full control over sharing and deleting.  You can work offline as well as in real-time in a collaborative session.          
                 </Text>
             </Box>
+        </Feature>
+        <Feature>
             <Box>
               <Heading>Open and secure</Heading>
                 <Text>
                   Fullscreen is open-source software. You will always be able to see what is in our codebase and have independent people check it for security. We implement strong privacy and safety standards.          
                 </Text>
             </Box>
+            <Visual src={require("~/assets/images/visual2.png")} alt="Fullscreen Visual 2"/>
+          </Feature>
+          <Feature>
+          <Visual src={require("~/assets/images/visual3.png")} alt="Fullscreen Visual 3"/>
             <Box>
             <Heading>A canvas for teams</Heading>
               <Text>
                 Fullscreen focuses on visual note-taking for teams. This includes the basics for a whiteboard (texts, sticky notes, sections), as well as visualisation and facilitation features. Fullscreen is beginner-friendly in the web browser and offers expert options in the native app.         
               </Text>
             </Box>
-          </Features>
-        <Button>Download Fullscreen</Button>
+          </Feature>
+        <Caption>&mdash;truly, yours.</Caption>
+        <Line />
         <Logos>
           <LogoBMBF alt="gefördert vom Bundesministerium für Bildung und Forschung" />
           <LogoOKFN alt="Logo Open Knowledge Foundation Deutschland" />
@@ -65,10 +77,15 @@ const Wrapper = styled("div", {
   "@lg": {
     padding: 200,
   },
+  "@xl": {
+    paddingTop: 200,
+    paddingLeft: 400,
+    paddingRight: 400,    
+  },
 });
 
 const HomeContainer = styled("main", {
-  display: "flex",
+  // display: "flex",
   alignItems: "left",
   flexDirection: "column",
   width: "100%",
@@ -78,45 +95,52 @@ const HomeContainer = styled("main", {
   color: "$blue",
 });
 
-const HeroImage = styled("img", {
-  margin: 10,
-  display: "none",
+const Logo = styled("img", {
+  marginBottom: "1em",
+  maxWidth: "15em",
   "@sm": {
     display: "block",
   },
 });
 
+const Hero = styled("div", {
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  // position: "relative",
+  // flexWrap: "wrap",
+  alignItems: "center",
+  marginBottom: "3em",
+  "@sm": {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+  },
+  "@xl": {
+    gap: 20,
+});
+
 const Title = styled("h1", {
   marginBottom: "1em",
-  maxWidth: "15em",
   textAlign: "left",
-  fontSize: "3em",
+  fontSize: "$4",  
   wordBreak: "keep-all",
-  "@md": {
-    fontSize: "5em",
-  },
+  columnGap: 20,
 });
 
-const Subtitle = styled("h2", {
-  marginBottom: "1em",
-  textAlign: "right",
-  fontSize: "1.5em",  
-  wordBreak: "keep-all",
-  "@md": {
-    fontSize: "2em",
-  },
-});
-
-const Features = styled("section", {
+const Feature = styled("div", {
   width: "100%",
   display: "flex",
   position: "relative",
   flexDirection: "row",
-  flexWrap: "wrap",
-  alignItems: "stretch",
+  justifyContent: "space-between",
+  flexWrap: "nowrap",
   marginBottom: "3em",
-  "@sm": {
-    // justifyContent: "center",
+  columnGap: 20,
+});
+
+const Visual = styled("img", {
+  "@xs": {
+    maxHeight: "100px",
   },
 });
 
@@ -124,7 +148,8 @@ const Box = styled("div", {
   display: "inline-block",
   flexDirection: "column",
   paddingRight: "20px",
-  "@md": {
+  flexGrow: 2,
+  "@xs": {
     flexDirection: "column",
     width: "50%",
   },
@@ -132,6 +157,7 @@ const Box = styled("div", {
 
 const Text = styled("p", {
   textAlign: "left",
+  fontSize: "$2",
   "@sm": {
     flexDirection: "row",
     justifyContent: "center",
@@ -141,24 +167,65 @@ const Text = styled("p", {
 const Heading = styled("h3", {
   marginBottom: "1em",
   textAlign: "left",
-  fontSize: "1.8em",  
+  fontSize: "$3",  
   wordBreak: "keep-all",
-  "@md": {
-    fontSize: "1.8em",
+});
+
+const ButtonGroup = styled("div", {
+  display: "flex",
+  position: "relative",
+  flexDirection: "row",
+  justifyContent: "right",
+  flexWrap: "wrap",
+  "@xl": {
+    columnGap: 20,
+  "@xs": {
+    justifyContent: "center",
+    columnGap: 20,
   },
 });
 
 const Button = styled("button", {
   border: "3px solid $blue",
-  padding: "6px",
   borderRadius: "10px",
   position: "relative",
+  padding: "6px",
   overflow: "auto",
   fontFamily: "$text",
-  fontSize: "$4",
+  fontSize: "$1",
+  fontWeight: "$2",
   color: "$blue",
-  width: "normal",
-  marginBottom: "3em",
+  width: "280px",
+  marginBottom: 20,
+});
+
+const PrimaryButton = styled("button", {
+  border: "3px solid $blue",
+  backgroundColor: "$blue", 
+  borderRadius: "10px",
+  position: "relative",
+  padding: "6px",
+  overflow: "auto",
+  fontFamily: "$text",
+  fontSize: "$1",
+  fontWeight: "$2",
+  color: "$background",
+  width: "280px",
+  marginBottom: 20,
+});
+
+const Caption = styled("h2", {
+  marginBottom: "1em",
+  textAlign: "right",
+  fontSize: "$3",  
+  wordBreak: "keep-all",
+  "@md": {
+    fontSize: "2em",
+  },
+});
+
+const Line = styled("hr", {
+  border: "2px solid $red";
 });
 
 const Logos = styled("section", {
