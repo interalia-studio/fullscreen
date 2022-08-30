@@ -27,6 +27,7 @@ jobs:
       with:
         profile: minimal
         toolchain: stable
+        target: aarch64-apple-darwin
 
     - name: Get npm cache directory
       id: npm-cache-dir

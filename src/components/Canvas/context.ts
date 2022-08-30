@@ -1,4 +1,7 @@
 import { TldrawApp } from "@tldraw/tldraw";
 import React from "react";
 
-export const AppContext = React.createContext<TldrawApp>({} as any);
+/**
+ * Provides access to the TLDraw instance.
+ */
+export const TldrawContext = React.createContext<TldrawApp>({} as any);

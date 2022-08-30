@@ -21,14 +21,16 @@
     "tauri:dev": "tauri dev",
     "build": "run-s build:web build:tauri",
     "build:web": "parcel build",
-    "build:tauri": "tauri build",
+    "build:tauri": "tauri build --target universal-apple-darwin",
     "check": "tsc --noEmit"
   },
   "dependencies": {
+    "@radix-ui/react-dropdown-menu": "^1.0.0",
     "@stitches/react": "^1.2.8",
     "@tauri-apps/api": "^1.0.2",
     "@tldraw/tldraw": "^1.19.1",
     "@y-presence/client": "^2.0.0",
+    "debug": "^4.3.4",
     "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -36,6 +38,7 @@
     "react-router-dom": "^6.3.0",
     "stitches-normalize-css": "^1.2.0",
     "uuid": "^8.3.2",
+    "y-indexeddb": "^9.0.9",
     "yjs": "^13.5.39"
   },
   "devDependencies": {

@@ -1,0 +1,1 @@
+export { useYjsAdapter } from "./hook";

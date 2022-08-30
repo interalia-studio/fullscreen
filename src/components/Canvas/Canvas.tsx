@@ -1,61 +1,55 @@
-import { Tldraw, TldrawApp } from "@tldraw/tldraw";
-import { appWindow } from "@tauri-apps/api/window";
-import React, { useEffect, useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { TDUser, Tldraw, TldrawApp } from "@tldraw/tldraw";
+import React, { useEffect, useCallback, useState, useContext } from "react";
+import debug from "debug";
 
-import { useYjsSession } from "~/adapters/yjs";
-import fileSystem from "~/lib/fileSystem";
 import { isNativeApp } from "~/lib/tauri";
-import { Toolbar } from "~/components/Toolbar";
 import { AppContext } from "~/components/Canvas";
+import { StoreContext } from "../Store";
 
-export const Canvas = ({ boardId }: { boardId: string }) => {
-  let navigate = useNavigate();
+const log = debug("fs:canvas");
+
+/**
+ * Mounts a TLDraw canvas and provides a `TldrawContext`
+ */
+export const Canvas: React.FC<{
+  children: React.ReactNode;
+}> = (props) => {
+  let store = useContext(StoreContext);
 
   const [tldrawApp, setTLDrawApp] = useState<TldrawApp>();
+
   const handleMount = useCallback(
     (tldraw: TldrawApp) => {
-      tldraw.loadRoom(boardId);
+      tldraw.loadRoom(store.boardId);
       tldraw.pause();
       setTLDrawApp(tldraw);
+      (window as unknown as any).app = tldraw;
     },
-    [boardId]
+    [store.boardId]
   );
 
-  const session = useYjsSession(tldrawApp, boardId);
-
-  const handleNewProject = () => {
-    const newBoardId = session.createDocument();
-    navigate(`/board/${newBoardId}`);
-  };
-
-  const handleOpenProject = async () => {
-    const fileContents = await fileSystem.openFile();
-    const newBoardId = session.loadDocument(fileContents);
-    navigate(`/board/${newBoardId}`);
-  };
-
-  const handleSaveProject = async () => {
-    const fileContents = session.serialiseDocument();
-    await fileSystem.saveFile(fileContents);
-  };
-
-  /**
-   * Setup Tauri event handlers on mount
-   */
   useEffect(() => {
-    if (isNativeApp()) {
-      appWindow.listen("tauri://menu", ({ windowLabel, payload }) => {
-        switch (payload) {
-          case "open":
-            handleOpenProject();
-            break;
-          case "save":
-            handleSaveProject();
-        }
-      });
+    if (tldrawApp && store.presence) {
+      store.presence.connect(tldrawApp);
     }
-  }, []);
+  }, [tldrawApp, store.presence]);
+
+  useEffect(() => {
+    if (tldrawApp && store.contents.shapes && store.contents.bindings) {
+      tldrawApp.replacePageContent(
+        store.contents.shapes,
+        store.contents.bindings,
+        {}
+      );
+    }
+  }, [tldrawApp, store.contents, store.boardId]);
+
+  const handlePresenceChange = useCallback(
+    (_app: TldrawApp, user: TDUser) => {
+      store.presence.update(user);
+    },
+    [store]
+  );
 
   return (
     <div className="tldraw">
@@ -63,18 +57,20 @@ export const Canvas = ({ boardId }: { boardId: string }) => {
         disableAssets
         showPages={false}
         showMultiplayerMenu={false}
-        readOnly={session?.isLoading}
+        readOnly={false}
         onMount={handleMount}
-        onNewProject={handleNewProject}
-        onOpenProject={handleOpenProject}
-        onSaveProject={handleSaveProject}
-        showMenu={!isNativeApp()}
+        onNewProject={store.handleNewProject}
+        onOpenProject={store.handleOpenProject}
+        onSaveProject={store.handleSaveProject}
+        showMenu={false}
         showTools={false}
-        {...session?.eventHandlers}
+        showStyles={false}
+        onChangePresence={handlePresenceChange}
+        {...store?.eventHandlers}
       />
       {tldrawApp && (
         <AppContext.Provider value={tldrawApp}>
-          <Toolbar />
+          {props.children}
         </AppContext.Provider>
       )}
     </div>

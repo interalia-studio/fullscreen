@@ -1,0 +1,1 @@
+export { JoinBoard } from "./JoinBoard";

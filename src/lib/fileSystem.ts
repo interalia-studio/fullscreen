@@ -16,22 +16,27 @@ export default {
    */
   saveFile: async (
     binary: Uint8Array,
-    fileName: string = "Untitled.fullscreen"
+    filePath?: string,
   ) => {
+    let path
     if (isNativeApp()) {
-      const fPath = await dialog.save({
-        filters: [
-          {
-            name: "Fullscreen Board",
-            extensions: ["fullscreen"],
-          },
-        ],
-      });
-      const contents = await fs.writeBinaryFile({
+      if (!filePath) {
+        path = await dialog.save({
+          filters: [
+            {
+              name: "Fullscreen Board",
+              extensions: ["fullscreen"],
+            },
+          ],
+        });
+      } else {
+        path = filePath
+      }
+      await fs.writeBinaryFile({
         contents: binary,
-        path: fPath,
+        path,
       });
-      return contents;
+      return path;
     }
 
     if ("showSaveFilePicker" in window) {
@@ -43,7 +48,7 @@ export default {
       const update = new Blob([binary]);
       const link = document.createElement("a");
       link.href = URL.createObjectURL(update);
-      link.download = fileName;
+      link.download = filePath || "Untitled.fullscreen";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -56,15 +61,15 @@ export default {
    */
   openFile: async () => {
     if (isNativeApp()) {
-      const fPath = await dialog.open({
+      const filePath = await dialog.open({
         directory: false,
         multiple: false,
-      });
-      const contents = await fs.readBinaryFile(fPath as string);
-      return contents;
+      }) as string;
+      const contents = await fs.readBinaryFile(filePath);
+      return {filePath, contents};
     }
 
-    return new Promise<Uint8Array>(async (resolve, reject) => {
+    return new Promise<{filePath: string, contents: Uint8Array}>(async (resolve, reject) => {
       if ("showOpenFilePicker" in window) {
         const [fileHandle] = await (window as any).showOpenFilePicker({
           types: [
@@ -78,11 +83,11 @@ export default {
           multiple: false,
         });
 
-        const bufferLike = await fileHandle.getFile();
+        const bufferLike: File = await fileHandle.getFile();
         const fileReader = new FileReader();
         fileReader.onload = (event) => {
-          const update = new Uint8Array(event.target.result as ArrayBuffer);
-          resolve(update);
+          const contents = new Uint8Array(event.target.result as ArrayBuffer);
+          resolve({filePath: bufferLike.name, contents});
         };
         fileReader.readAsArrayBuffer(bufferLike);
       } else {
@@ -92,8 +97,8 @@ export default {
         input.onchange = () => {
           const fileReader = new FileReader();
           fileReader.onload = (event) => {
-            const update = new Uint8Array(event.target.result as ArrayBuffer);
-            resolve(update);
+            const contents = new Uint8Array(event.target.result as ArrayBuffer);
+            resolve({filePath: input.files[0].name, contents});
           };
           fileReader.readAsArrayBuffer(input.files[0]);
         };
