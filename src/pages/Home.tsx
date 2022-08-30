@@ -7,7 +7,6 @@ import { isNativeApp } from "~/lib/tauri";
 
 import LogoBMBF from "../assets/images/logo-bmbf.svg";
 import LogoOKFN from "../assets/images/logo-okfn.svg";
-import { NONAME } from "dns";
 
 export const Home = () => {
   // Redirects to a random board when opening the native app
@@ -122,7 +121,7 @@ const Hero = styled("div", {
 const Title = styled("h1", {
   marginBottom: "1em",
   textAlign: "left",
-  fontSize: "$4",  
+  fontSize: "30px",  
   wordBreak: "keep-all",
   columnGap: 20,
 });
@@ -135,7 +134,6 @@ const Feature = styled("div", {
   justifyContent: "space-between",
   flexWrap: "nowrap",
   marginBottom: "3em",
-  columnGap: 20,
 });
 
 const Visual = styled("img", {
@@ -157,7 +155,7 @@ const Box = styled("div", {
 
 const Text = styled("p", {
   textAlign: "left",
-  fontSize: "$2",
+  fontSize: "20px",
   "@sm": {
     flexDirection: "row",
     justifyContent: "center",
@@ -167,7 +165,7 @@ const Text = styled("p", {
 const Heading = styled("h3", {
   marginBottom: "1em",
   textAlign: "left",
-  fontSize: "$3",
+  fontSize: "30px",
   wordBreak: "keep-all",
 });
 
@@ -192,11 +190,14 @@ const Button = styled("a", {
   padding: "6px",
   overflow: "auto",
   fontFamily: "$text",
-  fontSize: "$1",
+  fontSize: "20px",
   fontWeight: "$2",
+  textDecoration: "none",
+  textAlign: "center",
   color: "$blue",
   width: "250px",
   marginBottom: 20,
+  marginLeft: 10,
 });
 
 const PrimaryButton = styled("a", {
@@ -207,8 +208,10 @@ const PrimaryButton = styled("a", {
   padding: "6px",
   overflow: "auto",
   fontFamily: "$text",
-  fontSize: "$1",
+  fontSize: "20px",
   fontWeight: "$2",
+  textDecoration: "none",
+  textAlign: "center",
   color: "$background",
   width: "250px",
   marginBottom: 20,
