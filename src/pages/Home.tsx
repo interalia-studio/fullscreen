@@ -172,14 +172,15 @@ const Heading = styled("h3", {
 const ButtonGroup = styled("div", {
   display: "flex",
   position: "relative",
-  flexDirection: "row",
-  justifyContent: "right",
-  flexWrap: "wrap",
+  flexDirection: "column",
+  alignItems: "center",
+  columnGap: 20,
   "@xl": {
     columnGap: 20,
-  "@xs": {
-    justifyContent: "center",
-    columnGap: 20,
+  "@sm": {
+    flexDirection: "row",
+    justifyContent: "right",
+    flexWrap: "wrap",
   },
 });
 
@@ -197,7 +198,6 @@ const Button = styled("a", {
   color: "$blue",
   width: "250px",
   marginBottom: 20,
-  marginLeft: 10,
 });
 
 const PrimaryButton = styled("a", {
