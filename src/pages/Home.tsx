@@ -22,8 +22,8 @@ export const Home = () => {
         <Hero>
           <Title>Fullscreen is a collaborative whiteboard that allows you to own your data.</Title>
           <ButtonGroup>
-            <PrimaryButton>Open in browser</PrimaryButton>
-            <Button>Download Fullscreen</Button>
+            <PrimaryButton href="/board">Open in browser</PrimaryButton>
+            <Button href="https://github.com/interalia-studio/fullscreen/releases/tag/v0.2.0">Download Fullscreen</Button>
           </ButtonGroup>
         </Hero>
         <Feature>
@@ -167,7 +167,7 @@ const Text = styled("p", {
 const Heading = styled("h3", {
   marginBottom: "1em",
   textAlign: "left",
-  fontSize: "$3",  
+  fontSize: "$3",
   wordBreak: "keep-all",
 });
 
@@ -185,7 +185,7 @@ const ButtonGroup = styled("div", {
   },
 });
 
-const Button = styled("button", {
+const Button = styled("a", {
   border: "3px solid $blue",
   borderRadius: "10px",
   position: "relative",
@@ -195,11 +195,11 @@ const Button = styled("button", {
   fontSize: "$1",
   fontWeight: "$2",
   color: "$blue",
-  width: "280px",
+  width: "250px",
   marginBottom: 20,
 });
 
-const PrimaryButton = styled("button", {
+const PrimaryButton = styled("a", {
   border: "3px solid $blue",
   backgroundColor: "$blue", 
   borderRadius: "10px",
@@ -210,7 +210,7 @@ const PrimaryButton = styled("button", {
   fontSize: "$1",
   fontWeight: "$2",
   color: "$background",
-  width: "280px",
+  width: "250px",
   marginBottom: 20,
 });
 
